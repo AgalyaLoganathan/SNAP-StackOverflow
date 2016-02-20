@@ -1,0 +1,13 @@
+{
+    "name": "application-name",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "ejs": "*",
+        "stylus": "*",
+        "session": "*",
+        "request": "*",
+        "body-parser": "~1.13.2",
+        "express": "*"
+    }
+}
