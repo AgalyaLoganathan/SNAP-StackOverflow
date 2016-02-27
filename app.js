@@ -3,6 +3,16 @@ var express = require('express')
     , path = require('path')
     , bodyParser = require('body-parser');
 
+var stackexchange = require('stackexchange');
+var options = { version: 2.2 };
+var context = new stackexchange(options);
+var filter = {
+  pagesize: 50,
+  tagged: 'node.js',
+  sort: 'activity',
+  order: 'asc'
+};
+
 var app = express();
 var router = express.Router();
 
@@ -16,10 +26,21 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', function(req, res){
-    res.render('index.ejs');
+    res.sendFile(__dirname + '/views/login.html');
 });
-app.post('/dashboard', function(req, res){
-    res.render('dashboard.ejs', {'name': req.body.name});
+
+app.get('/badges', function(req, res){
+    context.tags.synonyms(filter, function(err, results){
+    if (err) throw err;
+
+    console.log(results.items);
+    console.log(results.has_more);
+});
+});
+
+
+app.get('/dashboard', function(req, res){
+    res.sendFile(__dirname + '/views/dashboard.html');
 });
 
 

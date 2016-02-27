@@ -1,13 +1,14 @@
 {
-    "name": "application-name",
-    "version": "0.0.1",
-    "private": true,
-    "dependencies": {
-        "ejs": "*",
-        "stylus": "*",
-        "session": "*",
-        "request": "*",
-        "body-parser": "~1.13.2",
-        "express": "*"
-    }
+  "name": "application-name",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "body-parser": "~1.13.2",
+    "ejs": "*",
+    "express": "*",
+    "request": "*",
+    "session": "*",
+    "stackexchange": "^0.3.0",
+    "stylus": "*"
+  }
 }
