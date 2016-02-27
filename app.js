@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', function(req, res){
-    res.render('index.ejs');
+    res.sendFile(__dirname + '/views/login.html');
 });
 
 app.get('/badges', function(req, res){
