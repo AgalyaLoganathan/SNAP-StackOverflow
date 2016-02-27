@@ -7,8 +7,8 @@ var stackexchange = require('stackexchange');
 var options = { version: 2.2 };
 var context = new stackexchange(options);
 var filter = {
-  pagesize: 50,
-  tagged: 'node.js',
+  limit: 10,
+  pagesize: 10,
   sort: 'activity',
   order: 'asc'
 };
@@ -29,15 +29,31 @@ app.get('/', function(req, res){
     res.sendFile(__dirname + '/views/login.html');
 });
 
-app.get('/badges', function(req, res){
-    context.tags.synonyms(filter, function(err, results){
-    if (err) throw err;
+app.get('/get-tags', function(req, res) {
 
-    console.log(results.items);
-    console.log(results.has_more);
-});
 });
 
+app.get('/did-you-know', function(req, res){
+    var data = [];
+    context.tags.faq(filter, function(err, results){
+    if (err) {
+        res.render('questions.ejs', {data: data});
+    } else {
+    for(i = 0; i < 11; i++) {
+        if(results.items[i].is_answered == true) {
+        console.log(results.items[i].link);
+        console.log(results.items[i].title);
+        var d = {'id': i,
+                'link': results.items[i].link,
+                'title': results.items[i].title,
+                'tags': results.items[i].tags};
+        data.push(d);
+        console.log(data.length);
+        }
+    }
+}
+}, ['java']);
+});
 
 app.get('/dashboard', function(req, res){
     res.sendFile(__dirname + '/views/dashboard.html');
