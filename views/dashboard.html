@@ -3,7 +3,6 @@
   <head>
 
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="stylesheets/style.css">
     <script src="js/jquery.js"></script>
     <script src="js/angular.js"></script>
     <script src="js/snap.js"></script>
@@ -49,7 +48,7 @@
                 <div class="panel-body">
                   <div class="col-sm-8">
                     {{question.question}}
-                    <span style="display:inline-block" class="label label-success" ng-repeat="tag in question.tags">
+                    <span style="display:inline-block" class="label label-default" ng-repeat="tag in question.tags">
                       {{tag}}
                     </span>
                   </div>
@@ -69,7 +68,7 @@
                 <div class="panel-body">
                   <div class="col-sm-8">
                     {{question.question}}
-                    <span style="display:inline-block" class="label label-success" ng-repeat="tag in question.tags">
+                    <span style="display:inline-block" class="label label-default" ng-repeat="tag in question.tags">
                       {{tag}}
                     </span>
                   </div>
@@ -96,7 +95,13 @@
 
             <div class="panel-heading">Competencies</div>
 
-            <div class="panel-body">Competency list ...</div>
+            <div class="panel-body" ng-controller="CompetencyListController">
+              <span ng-repeat="competency in competency_list">
+                <button class="btn btn-success">
+                    {{competency}} <span class="badge">x</span>
+                </button>&nbsp;
+              </span>
+            </div>
 
             <div class="panel-footer">
               <form class="form-inline">
@@ -115,7 +120,13 @@
           <div class="panel panel-default">
             <div class="panel-heading">Learning Objectives</div>
 
-            <div class="panel-body">Learning objectives list...</div>
+            <div class="panel-body" ng-controller="LearningListController">
+              <span ng-repeat="learning in learning_list">
+                <button class="btn btn-danger">
+                    {{learning}} <span class="badge">x</span>
+                </button>&nbsp;
+              </span>
+            </div>
 
             <div class="panel-footer">
               <form class="form-inline">
