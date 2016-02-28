@@ -9,6 +9,26 @@ var competency = [
     score: 25
   },
   {
+    topic: 'ReDddit',
+    score: 65
+  },
+  {
+    topic: 'AH',
+    score: 23
+  },
+  {
+    topic: 'BG',
+    score: 76
+  },
+  {
+    topic: 'CF',
+    score: 23
+  },
+  {
+    topic: 'E',
+    score: 67
+  },
+  {
     topic: 'Snapchat',
     score: 42
   },
@@ -39,8 +59,9 @@ var competency = [
 ];
 
 function barChart() {
+    var threshold = 65;
     var width = $('.chart').width();
-    var height = 450;
+    var height = competency.length * 25;
     var padding = 20;
     var margin = {
         left: 75,
@@ -50,7 +71,8 @@ function barChart() {
     };
     var w = width - margin.left - margin.right;
     var h = height - margin.top - margin.bottom;
-  	
+    var widthT = width*threshold/100;
+
     var xExtent = d3.extent(competency, function(d) {
         return d.score;
     });
@@ -67,10 +89,12 @@ function barChart() {
             return d.topic;
         }))
         .rangeRoundBands([margin.top, h - padding]);
+    var yGuideScaleT = d3.scale.ordinal()
+        .rangeRoundBands([margin.top, h - padding]);
     var labelScale = d3.scale.ordinal()
         .domain(d3.range(0, competency.length))
         .rangePoints([padding + 11.25, h - padding - 17]);
-    //create the SVG
+
     var svg = d3.select('.chart')
         .append('svg')
         .attr('width', w + margin.left + margin.right)
@@ -83,7 +107,7 @@ function barChart() {
         .attr('text-anchor', 'middle')
         .attr('font-size', 32)
         .text('Loading...');
-    //append rectangles
+
     var barChart = svg.selectAll('rect')
         .data(competency)
         .enter()
@@ -94,14 +118,20 @@ function barChart() {
         })
         .attr('width', 0)
         .attr('height', yScale.rangeBand())
-        .attr('fill', '#193441')
+        .attr('fill', function(d) {
+          if(d.score >= threshold) {
+            return '#099538';
+          } else {
+            return '#750303';
+          }
+        })
         .attr('shape-rendering', 'crispEdges')
         .attr('stroke', 'black');
-    //x-axis
+
     var xAxis = d3.svg.axis()
         .scale(xScale)
         .orient('bottom')
-        .ticks(4);
+        .ticks(5);
     var xGuide = d3.select('svg')
         .append('g')
         .attr('opacity', 0);
@@ -112,7 +142,7 @@ function barChart() {
             fill: 'none',
             stroke: '#000'
         });
-    //y-axis
+
     var yAxis = d3.svg.axis()
         .scale(yGuideScale)
         .orient('left');
@@ -127,7 +157,22 @@ function barChart() {
             fill: 'none',
             stroke: '#000'
         });
-    //append labels
+
+    var yAxisT = d3.svg.axis()
+            .scale(yGuideScaleT)
+            .orient('left');
+    var yGuideT = d3.select('svg')
+        .append('g')
+        .attr('opacity', 0);
+    yAxisT(yGuideT);
+    yGuideT.attr('transform', 'translate(' + (widthT) + ','+(margin.top/2)+')')
+    yGuideT.attr('text-anchor', 'bottom');
+    yGuideT.selectAll('path')
+        .style({
+            fill: 'none',
+            stroke: '#000'
+        });
+
     var barText = svg.selectAll('.bartext')
         .data(competency)
         .enter()
@@ -138,17 +183,14 @@ function barChart() {
         .attr('x', 0)
         .attr('y', function(d, i) {
             return labelScale(i);
-        })/*
-        .text(function(d) {
-            return Math.round(d.score);
-        })*/;
-    //append legend
+        });
+
     d3.select('svg')
         .append('text')
         .attr('text-size', 16)
         .attr('x', (margin.left))
         .attr('y', (height - 5));
-    //apply transitions
+
     barChart.transition()
         .attr('width', function(d) {
             return xScale(d.score);
@@ -167,6 +209,10 @@ function barChart() {
         .delay(1000)
         .remove();
     yGuide.transition()
+        .delay(1700)
+        .duration(800)
+        .attr('opacity', 1);
+    yGuideT.transition()
         .delay(1700)
         .duration(800)
         .attr('opacity', 1);
