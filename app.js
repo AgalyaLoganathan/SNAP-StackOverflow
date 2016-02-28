@@ -17,6 +17,7 @@ var app = express();
 var router = express.Router();
 
 // all environments
+app.use(express.static(__dirname + '/public'))
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -56,7 +57,15 @@ app.get('/did-you-know', function(req, res){
 });
 
 app.get('/dashboard', function(req, res){
-    res.sendFile(__dirname + '/views/dashboard.html');
+    console.log("inside server function");
+    var questions_to_answer = [
+    {
+      id:1,
+      question:'Test quetsion',
+      tags:['Test-tag'],
+      link:'http://stackoverflow.com/questions/18539711/input-widths-on-bootstrap-3'
+    }];
+    res.json(questions_to_answer);
 });
 app.get('/profile', function(req, res){
     res.sendFile(__dirname + '/views/profile.html');
