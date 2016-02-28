@@ -1,17 +1,36 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="snap">
   <head>
-    
+
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <script src="js/jquery.js"></script>
     <script src="js/angular.js"></script>
     <script src="js/snap.js"></script>
-    
-    </script>
     <title>SNAP - Learning System</title>
   </head>
 
   <body>
+    <nav class="navbar navbar-inverse" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</a></li>
+                <li><a href="profile"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Profile</a></li>
+                <li><a><span class="glyphicon glyphicon-globe" aria-hidden="true"></span> Learning Groups</a></li>
+                <li><a><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout</a></li>
+            </ul>
+        </div>
+      </div>
+    </nav>
+
     <div class="container">
       <div class="row row-content">
         <h1 class="text-center">SNAP</h1>
@@ -24,12 +43,12 @@
         <div class="col-sm-4">
           <div class="panel panel-default">
             <div class="panel-heading">What To Answer</div>
-            <div class="panel-body" ng-controller="WhatToAnswerController">
+            <div class="panel-body"  style="max-height: 400px;overflow-y: scroll;" ng-controller="WhatToAnswerController">
               <div class="panel panel-default" ng-repeat="question in questions_to_answer">
                 <div class="panel-body">
                   <div class="col-sm-8">
                     {{question.question}}
-                    <span style="display:inline-block" class="label label-success" ng-repeat="tag in question.tags">
+                    <span style="display:inline-block" class="label label-default" ng-repeat="tag in question.tags">
                       {{tag}}
                     </span>
                   </div>
@@ -44,12 +63,12 @@
         <div class="col-sm-4">
           <div class="panel panel-default">
             <div class="panel-heading">What To Learn</div>
-            <div class="panel-body" ng-controller="WhatToLearnController">
+            <div class="panel-body" style="max-height: 400px;overflow-y: scroll;" ng-controller="WhatToLearnController">
               <div class="panel panel-default" ng-repeat="question in questions_to_learn">
                 <div class="panel-body">
                   <div class="col-sm-8">
                     {{question.question}}
-                    <span style="display:inline-block" class="label label-success" ng-repeat="tag in question.tags">
+                    <span style="display:inline-block" class="label label-default" ng-repeat="tag in question.tags">
                       {{tag}}
                     </span>
                   </div>
@@ -71,12 +90,18 @@
       </div>
 
       <div class="row row-content">
-        <div class="col-sm-4">
+        <div class="col-sm-6">
           <div class="panel panel-default">
 
             <div class="panel-heading">Competencies</div>
 
-            <div class="panel-body">Competency list ...</div>
+            <div class="panel-body" ng-controller="CompetencyListController">
+              <span ng-repeat="competency in competency_list">
+                <button class="btn btn-success">
+                    {{competency}} <span class="badge">x</span>
+                </button>&nbsp;
+              </span>
+            </div>
 
             <div class="panel-footer">
               <form class="form-inline">
@@ -90,17 +115,18 @@
 
           </div>
         </div>
-        <div class="col-sm-4">
-          <div class="panel panel-default">
-            <div class="panel-heading">Competency Levels</div>
-            <div class="panel-body">Panel Content</div>
-          </div>
-        </div>
-        <div class="col-sm-4">
+
+        <div class="col-sm-6">
           <div class="panel panel-default">
             <div class="panel-heading">Learning Objectives</div>
 
-            <div class="panel-body">Learning objectives list...</div>
+            <div class="panel-body" ng-controller="LearningListController">
+              <span ng-repeat="learning in learning_list">
+                <button class="btn btn-danger">
+                    {{learning}} <span class="badge">x</span>
+                </button>&nbsp;
+              </span>
+            </div>
 
             <div class="panel-footer">
               <form class="form-inline">

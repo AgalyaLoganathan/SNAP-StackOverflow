@@ -60,4 +60,12 @@ app.controller('WhatToAnswerController', ['$scope', function($scope) {
       }
     }
   };
+}])
+.controller('CompetencyListController', ['$scope', function($scope) {
+  var competency_list = ['html','twitter-bootstrap','css'];
+  $scope.competency_list = competency_list;
+}])
+.controller('LearningListController', ['$scope', function($scope) {
+  var learning_list = ['java','nullpointerexception','equality'];
+  $scope.learning_list = learning_list;
 }]);

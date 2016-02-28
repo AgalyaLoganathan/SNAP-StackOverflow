@@ -42,7 +42,9 @@ app.get('/badges', function(req, res){
 app.get('/dashboard', function(req, res){
     res.sendFile(__dirname + '/views/dashboard.html');
 });
-
+app.get('/profile', function(req, res){
+    res.sendFile(__dirname + '/views/profile.html');
+});
 
 app.get('/test1', function(req, res){
   // get tags related
