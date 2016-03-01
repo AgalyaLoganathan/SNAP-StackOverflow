@@ -44,19 +44,15 @@ app.get('/', function(req, res){
 });
 
 app.get('/what-to-answer', function(req, res){
-    console.log("here");
     var relatedTags = [];
     context.tags.related(filter_for_tags, function(err, results){
     if (err) {
-              console.log("relatedTags " + relatedTags);
               var data = [];
               context.tags.faq(filter_for_answering, function(err, results){
               if (err) {
-                  console.log("data collected " + data.length);
                   res.json(data);
               } else {
                   for(i = 0; i < 51; i++) {
-                  console.log("Boolean is "+ JSON.stringify(results.items[i]));
                   if(results.items[i].answer_count <= 2) {
                   var d = {'id': i,
                           'link': results.items[i].link,
