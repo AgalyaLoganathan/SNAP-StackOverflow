@@ -1,26 +1,8 @@
 var app = angular.module('snap',[]);
-app.controller('WhatToAnswerController', ['$scope', function($scope) {
-  var questions_to_answer = [
-    {
-      id:1,
-      question:'Input widths on Bootstrap 3',
-      tags:['css','twitter-bootstrap','twitter-bootstrap-3'],
-      link:'http://stackoverflow.com/questions/18539711/input-widths-on-bootstrap-3'
-    },
-    {
-      id:2,
-      question:'Form inline inside a form horizontal in twitter bootstrap?',
-      tags:['html','forms','twitter-bootstrap'],
-      link:'http://stackoverflow.com/questions/12201835/form-inline-inside-a-form-horizontal-in-twitter-bootstrap'
-    },
-    {
-      id:3,
-      question:'How to center a inline form bootstrap 3',
-      tags:['html', 'css', 'twitter-bootstrap-3'],
-      link:'http://stackoverflow.com/questions/26102910/how-to-center-a-inline-form-bootstrap-3'
-    }
-  ];
-  $scope.questions_to_answer = questions_to_answer;
+app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $http) {
+    $http.get('/what-to-answer').success(function(data){
+        $scope.questions_to_answer = data;
+    });
   $scope.updateCompetency = function(question_id) {
     for (var i = 0; i < $scope.questions_to_answer.length; i++) {
       if($scope.questions_to_answer[i].id == question_id) {

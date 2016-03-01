@@ -13,6 +13,13 @@ var filter = {
   order: 'asc'
 };
 
+var filter_for_answering = {
+  limit: 50,
+  pagesize: 50,
+  sort: 'activity',
+  order: 'asc'
+};
+
 var filter_for_tags = {
   limit: 10,
   pagesize: 3,
@@ -35,6 +42,40 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/', function(req, res){
     res.sendFile(__dirname + '/views/login.html');
 });
+
+app.get('/what-to-answer', function(req, res){
+    console.log("here");
+    var relatedTags = [];
+    context.tags.related(filter_for_tags, function(err, results){
+    if (err) {
+              console.log("relatedTags " + relatedTags);
+              var data = [];
+              context.tags.faq(filter_for_answering, function(err, results){
+              if (err) {
+                  console.log("data collected " + data.length);
+                  res.json(data);
+              } else {
+                  for(i = 0; i < 51; i++) {
+                  console.log("Boolean is "+ JSON.stringify(results.items[i]));
+                  if(results.items[i].answer_count <= 2) {
+                  var d = {'id': i,
+                          'link': results.items[i].link,
+                          'question': results.items[i].title,
+                          'tags': results.items[i].tags};
+                  data.push(d);
+                  }
+              }
+          }
+          }, relatedTags);
+} else {
+    for(i = 0;i<4;i++){
+      // Fetch 3 related tags; more than this wouldn't give proper results since tags are diverse
+      relatedTags.push(results.items[i].name);
+    }
+  }
+  }, ['jquery']);
+});
+
 
 app.get('/what-to-learn', function(req, res){
     var relatedTags = [];
