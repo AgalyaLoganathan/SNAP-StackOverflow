@@ -102,9 +102,13 @@ app.get('/what-to-learn', function(req, res){
   }, ['android']);
 });
 
-app.get('/profile', function(req, res){
+app.get('/dashboard', function(req, res){
     res.sendFile(__dirname + '/views/dashboard.html');
 });
+app.get('/profile', function(req, res){
+    res.sendFile(__dirname + '/views/graph.html');
+});
+
 
 http.createServer(app).listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
