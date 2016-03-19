@@ -1,7 +1,8 @@
 var express = require('express')
     , http = require('http')
     , path = require('path')
-    , bodyParser = require('body-parser');
+    , bodyParser = require('body-parser')
+    , mongoDb = require('mongoose');
 
 var stackexchange = require('stackexchange');
 var options = { version: 2.2 };
@@ -38,6 +39,95 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(router);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// mongo connection
+mongoDb.connect('mongodb://localhost/snap_stackoverflow');
+var connection = mongoDb.connection;
+connection.once('open', function callback() {
+    console.log("DB connected successfully");
+    createDbSchema();
+});
+
+var createDbSchema = function(){
+    var userSchema = new mongoDb.Schema({
+          userId: Number
+          , userName: { type: String }
+          , accountId: Number
+          , questionIdsToAvoid : [Number]
+          , competencyIds : [Number]
+          , learningObjectiveIds : [Number]
+          , learningGroupIds : [Number]
+          });
+
+    var competencySchema = new mongoDb.Schema({
+        competencyId: Number
+        , competencyName: {type: String}
+        , score: Number
+    });
+
+    var learningObjectiveSchema = new mongoDb.Schema({
+        learningObjectiveId: Number
+        , learningObjectiveName: {type: String}
+        , score: Number
+    });
+
+    var learningGroupSchema = new mongoDb.Schema({
+        learningGroupId: Number
+        , learningGroupName: {type: String}
+        , content: String
+    });
+
+/* This is the code to use the schema to create a model and populate the model.
+   Once the first entry is created, we could see that reflected in our local database */
+    var User = mongoDb.model('User', userSchema);
+    var firstUser = new User({
+            userId: 1
+          , userName: "testMe"
+          , accountId: 1
+          , questionIdsToAvoid : [100]
+          , competencyIds : [1]
+          , learningObjectiveIds : [1]
+          , learningGroupIds : [1]
+    });
+
+    firstUser.save(function(err, firstUser) {
+      if (err) return console.error(err);
+      console.log(firstUser);
+    });
+
+    var Competency = mongoDb.model('Competency', competencySchema);
+    var sampleCompetency = new Competency({
+          competencyId: 1
+        , competencyName: 'sample'
+        , score : 0
+    });
+    sampleCompetency.save(function(err, sampleCompetency) {
+      if (err) return console.error(err);
+      console.log(sampleCompetency);
+    });
+
+    var LearningObjective = mongoDb.model('LearningObjective', learningObjectiveSchema);
+    var sampleLearningObjective = new LearningObjective({
+          LearningObjectiveId: 1
+        , LearningObjectiveName: 'sample'
+        , score : 0
+    });
+    sampleLearningObjective.save(function(err, sampleLearningObjective) {
+      if (err) return console.error(err);
+      console.log(sampleLearningObjective);
+    });
+
+    var LearningGroup = mongoDb.model('', learningGroupSchema);
+    var sampleLearningGroup = new LearningGroup({
+          LearningGroupId: 1
+        , LearningGroupName: 'sample'
+        , content : "content"
+    });
+    sampleLearningGroup.save(function(err, sampleLearningGroup) {
+      if (err) return console.error(err);
+      console.log(sampleLearningGroup);
+    });
+};
 
 app.get('/', function(req, res){
     res.sendFile(__dirname + '/views/login.html');

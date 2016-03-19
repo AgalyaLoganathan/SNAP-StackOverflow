@@ -9,6 +9,7 @@
     "request": "*",
     "session": "*",
     "stackexchange": "^0.3.0",
-    "stylus": "*"
+    "stylus": "*",
+    "mongoose" : "*"
   }
 }
