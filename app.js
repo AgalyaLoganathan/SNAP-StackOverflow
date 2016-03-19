@@ -3,7 +3,8 @@ var express = require('express')
     , path = require('path')
     , bodyParser = require('body-parser')
     , _ = require('underscore')
-    , mongoDb = require('mongoose');
+    , mongoDb = require('mongoose')
+    , session = require('express-session');
 var stackexchange = require('stackexchange');
 var options = { version: 2.2 };
 var context = new stackexchange(options);
@@ -39,6 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(router);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(session({secret: '1234567890QWERTY'}));
 
 // mongo connection
 mongoDb.connect('mongodb://localhost/snap_stackoverflow');
@@ -154,7 +156,7 @@ app.post('/login', function(req, res){
       res.render('login.ejs', {message:'Server error. Try again.'});
     }
     if(user) {
-      // req.session.user_id = username;
+      req.session.user_id = username;
       res.redirect('/dashboard');     
     }
     else {
@@ -284,10 +286,20 @@ app.get('/what-to-learn', function(req, res){
 });
 
 app.get('/dashboard', function(req, res){
+  if(req.session.user_id)
     res.sendFile(__dirname + '/views/dashboard.html');
+  else
+    res.render('login.ejs', {message:'Please login first'});
 });
 app.get('/profile', function(req, res){
+  if(req.session.user_id)
     res.sendFile(__dirname + '/views/graph.html');
+  else
+    res.render('login.ejs', {message:'Please login first'});
+});
+app.get('/logout', function(req, res){
+  delete req.session.user_id;
+  res.redirect('/login');
 });
 
 http.createServer(app).listen(app.get('port'), function () {
