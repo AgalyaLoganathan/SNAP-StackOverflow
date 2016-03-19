@@ -2,6 +2,7 @@ var express = require('express')
     , http = require('http')
     , path = require('path')
     , bodyParser = require('body-parser')
+    , _ = require('underscore')
     , mongoDb = require('mongoose');
 var stackexchange = require('stackexchange');
 var options = { version: 2.2 };
@@ -42,47 +43,49 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // mongo connection
 mongoDb.connect('mongodb://localhost/snap_stackoverflow');
 var connection = mongoDb.connection;
-connection.once('open', function callback() {
-    console.log("DB connected successfully");
-    createDbSchema();
+var userSchema = new mongoDb.Schema({
+      userId: Number
+      , userName: { type: String }
+      , accountId: Number
+      , questionIdsToAvoid : [Number]
+      , competencyIds : [Number]
+      , learningObjectiveIds : [Number]
+      , learningGroupIds : [Number]
+      });
+
+var competencySchema = new mongoDb.Schema({
+    competencyId: Number
+    , competencyName: {type: String}
+    , score: Number
 });
 
-var auth,userSchema,competencySchema,learningObjectiveSchema,learningGroupSchema;
-var createDbSchema = function(){
-    auth = new mongoDb.Schema({
+var auth = new mongoDb.Schema({
       username:String,
       password:String
     });
-    userSchema = new mongoDb.Schema({
-          userId: Number
-          , userName: { type: String }
-          , accountId: Number
-          , questionIdsToAvoid : [Number]
-          , competencyIds : [Number]
-          , learningObjectiveIds : [Number]
-          , learningGroupIds : [Number]
-          });
+    
+    
+var learningObjectiveSchema = new mongoDb.Schema({
+    learningObjectiveId: Number
+    , learningObjectiveName: {type: String}
+    , score: Number
+});
 
-    competencySchema = new mongoDb.Schema({
-        competencyId: Number
-        , competencyName: {type: String}
-        , score: Number
-    });
+var learningGroupSchema = new mongoDb.Schema({
+    learningGroupId: Number
+    , learningGroupName: {type: String}
+    , content: String
+});
 
-    learningObjectiveSchema = new mongoDb.Schema({
-        learningObjectiveId: Number
-        , learningObjectiveName: {type: String}
-        , score: Number
-    });
+var User = mongoDb.model('User', userSchema);
+var Competency = mongoDb.model('Competency', competencySchema);
+var LearningObjective = mongoDb.model('LearningObjective', learningObjectiveSchema);
+var LearningGroup = mongoDb.model('LearningGroup', learningGroupSchema);
 
-    learningGroupSchema = new mongoDb.Schema({
-        learningGroupId: Number
-        , learningGroupName: {type: String}
-        , content: String
-    });
+var createDbSchema = function(){
 /* This is the code to use the schema to create a model and populate the model.
    Once the first entry is created, we could see that reflected in our local database */
-    var User = mongoDb.model('User', userSchema);
+
     var firstUser = new User({
             userId: 1
           , userName: "testMe"
@@ -92,13 +95,11 @@ var createDbSchema = function(){
           , learningObjectiveIds : [1]
           , learningGroupIds : [1]
     });
-
     firstUser.save(function(err, firstUser) {
       if (err) return console.error(err);
       console.log(firstUser);
     });
 
-    var Competency = mongoDb.model('Competency', competencySchema);
     var sampleCompetency = new Competency({
           competencyId: 1
         , competencyName: 'sample'
@@ -109,7 +110,6 @@ var createDbSchema = function(){
       console.log(sampleCompetency);
     });
 
-    var LearningObjective = mongoDb.model('LearningObjective', learningObjectiveSchema);
     var sampleLearningObjective = new LearningObjective({
           LearningObjectiveId: 1
         , LearningObjectiveName: 'sample'
@@ -120,7 +120,7 @@ var createDbSchema = function(){
       console.log(sampleLearningObjective);
     });
 
-    var LearningGroup = mongoDb.model('', learningGroupSchema);
+
     var sampleLearningGroup = new LearningGroup({
           LearningGroupId: 1
         , LearningGroupName: 'sample'
@@ -196,6 +196,34 @@ app.post('/signup', function(req, res){
   });
 })
 
+app.post('/updateCompetency', function(req, res){
+    var tags = req.body;
+    Competency.find({}, function(err, results){
+        _.each(results, function(competency) {
+          if(_.contains(tags, competency['competencyName'])) {
+              competency['score'] = competency['score'] + 1;
+              competency.save(function(err, competency) {
+              if (err) return console.error(err);
+          });
+        };
+        });
+    });
+});
+
+app.post('/updateLearningObjective', function(req, res){
+    var tags = req.body;
+    LearningObjective.find({}, function(err, results){
+        _.each(results, function(learningObjective) {
+          if(_.contains(tags, learningObjective['learningObjectiveName'])) {
+              learningObjective['score'] = learningObjective['score'] + 1;
+              learningObjective.save(function(err, learningObjective) {
+              if (err) return console.error(err);
+          });
+        };
+        });
+    });
+});
+
 app.get('/what-to-answer', function(req, res){
     var relatedTags = [];
     context.tags.related(filter_for_tags, function(err, results){
@@ -261,7 +289,6 @@ app.get('/dashboard', function(req, res){
 app.get('/profile', function(req, res){
     res.sendFile(__dirname + '/views/graph.html');
 });
-
 
 http.createServer(app).listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
