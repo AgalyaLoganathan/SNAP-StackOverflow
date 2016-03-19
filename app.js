@@ -117,7 +117,7 @@ var createDbSchema = function(){
       console.log(sampleLearningObjective);
     });
 
-    var LearningGroup = mongoDb.model('LearningGroup', learningGroupSchema);
+    var LearningGroup = mongoDb.model('', learningGroupSchema);
     var sampleLearningGroup = new LearningGroup({
           LearningGroupId: 1
         , LearningGroupName: 'sample'
