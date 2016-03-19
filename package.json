@@ -10,6 +10,7 @@
     "session": "*",
     "stackexchange": "^0.3.0",
     "stylus": "*",
-    "mongoose" : "*"
+    "mongoose" : "*",
+    "underscore": "*"
   }
 }
