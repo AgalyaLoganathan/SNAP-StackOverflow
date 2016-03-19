@@ -23,18 +23,18 @@
   	<div class="container absolute-center is-responsive">
       <div class="row row-content">
         <div class="panel panel-default">
-        	<div class="panel-heading">Sign Up</div>
+        	<div class="panel-heading"><h1>Sign Up</h1></div>
         	<div class="panel-body">
             <% if (message != 'Signup') { %>
               <div class="alert alert-info"><%= message %></div>
             <% } %>
         		<form action="/signup" method="post">
         			<div class="form-group">
-        				<label for="new-competency">SNAP Username: </label>
+        				<label for="new-competency">Username for SNAP: </label>
                   		<input type="text" class="form-control" id="username" name="username" placeholder="Enter user name" />
         			</div>
         			<div class="form-group">
-        				<label for="new-competency">SNAP Password: </label>
+        				<label for="new-competency">Password for SNAP: </label>
                   		<input type="password" class="form-control" id="password" name="password" placeholder="Enter password" />
         			</div>
         			<div class="form-group">
@@ -42,7 +42,7 @@
         			</div>
         		</form>
         	</div>
-        	<div class="panel-footer" align="right"><a href="/" class="btn btn-primary">Login</a></div>
+        	<div class="panel-footer" align="right">Already have an account? <a href="/login">Login</a></div>
         </div>
       </div>
   	</div>

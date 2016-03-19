@@ -137,12 +137,16 @@ var createDbSchema = function(){
 // var secret = 'SessionSecret';
 
 app.get('/', function(req, res){
-    //res.sendFile(__dirname + '/views/login.html');
-    res.render('login.ejs', {message:'Login'});
+  if(req.session.user_id)
+    res.sendFile(__dirname + '/views/dashboard.html');
+  else
+    res.sendFile(__dirname + '/views/home.html');
 });
 
 app.get('/login', function(req, res){
-    //res.sendFile(__dirname + '/views/login.html');
+  if(req.session.user_id)
+    res.sendFile(__dirname + '/views/dashboard.html');
+  else
     res.render('login.ejs', {message:'Login'});
 });
 
@@ -166,6 +170,9 @@ app.post('/login', function(req, res){
 });
 
 app.get('/signup', function(req, res){
+  if(req.session.user_id)
+    res.sendFile(__dirname + '/views/dashboard.html');
+  else
     res.render('signup.ejs', {message:'Signup'});
 });
 
