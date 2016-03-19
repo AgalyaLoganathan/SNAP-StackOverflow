@@ -3,7 +3,6 @@ var express = require('express')
     , path = require('path')
     , bodyParser = require('body-parser')
     , mongoDb = require('mongoose');
-
 var stackexchange = require('stackexchange');
 var options = { version: 2.2 };
 var context = new stackexchange(options);
@@ -48,8 +47,13 @@ connection.once('open', function callback() {
     createDbSchema();
 });
 
+var auth,userSchema,competencySchema,learningObjectiveSchema,learningGroupSchema;
 var createDbSchema = function(){
-    var userSchema = new mongoDb.Schema({
+    auth = new mongoDb.Schema({
+      username:String,
+      password:String
+    });
+    userSchema = new mongoDb.Schema({
           userId: Number
           , userName: { type: String }
           , accountId: Number
@@ -59,24 +63,23 @@ var createDbSchema = function(){
           , learningGroupIds : [Number]
           });
 
-    var competencySchema = new mongoDb.Schema({
+    competencySchema = new mongoDb.Schema({
         competencyId: Number
         , competencyName: {type: String}
         , score: Number
     });
 
-    var learningObjectiveSchema = new mongoDb.Schema({
+    learningObjectiveSchema = new mongoDb.Schema({
         learningObjectiveId: Number
         , learningObjectiveName: {type: String}
         , score: Number
     });
 
-    var learningGroupSchema = new mongoDb.Schema({
+    learningGroupSchema = new mongoDb.Schema({
         learningGroupId: Number
         , learningGroupName: {type: String}
         , content: String
     });
-
 /* This is the code to use the schema to create a model and populate the model.
    Once the first entry is created, we could see that reflected in our local database */
     var User = mongoDb.model('User', userSchema);
@@ -129,9 +132,69 @@ var createDbSchema = function(){
     });
 };
 
+// var secret = 'SessionSecret';
+
 app.get('/', function(req, res){
-    res.sendFile(__dirname + '/views/login.html');
+    //res.sendFile(__dirname + '/views/login.html');
+    res.render('login.ejs', {message:'Login'});
 });
+
+app.get('/login', function(req, res){
+    //res.sendFile(__dirname + '/views/login.html');
+    res.render('login.ejs', {message:'Login'});
+});
+
+app.post('/login', function(req, res){
+  var post = req.body;
+  var username = post.username;
+  var password = post.password;
+  var Auth = mongoDb.model('Auth', auth);
+  Auth.findOne({"username":username,"password":password}, function(err, user){
+    if(err) {
+      res.render('login.ejs', {message:'Server error. Try again.'});
+    }
+    if(user) {
+      // req.session.user_id = username;
+      res.redirect('/dashboard');     
+    }
+    else {
+      res.render('login.ejs', {message:'Incorrect user name or password.'});
+    }
+  });
+});
+
+app.get('/signup', function(req, res){
+    res.render('signup.ejs', {message:'Signup'});
+});
+
+app.post('/signup', function(req, res){
+  var post = req.body;
+  var username = post.username;
+  var password = post.password;
+  var Auth = mongoDb.model('Auth', auth);
+
+  Auth.findOne({"username":username}, function(err, user){
+    if(err) {
+      res.render('signup.ejs', {message:'Server error. Try again.'});
+    }
+    if(user == null) {
+      var toInsert = new Auth({
+        "username":username,
+        "password":password
+      });
+  
+      toInsert.save(function(err){
+        if(err) {
+          res.render('signup.ejs', {message:'Server error. Try again.'});
+        }
+      });
+      res.render('login.ejs', {message:'Sign up successful. Login now.'});
+    }
+    else {
+      res.render('signup.ejs', {message:'User name is already taken. Try something else.'});
+    }
+  });
+})
 
 app.get('/what-to-answer', function(req, res){
     var relatedTags = [];
