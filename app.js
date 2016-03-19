@@ -59,25 +59,25 @@ var competencySchema = new mongoDb.Schema({
     competencyId: Number
     , competencyName: {type: String}
     , score: Number
-});
+}, {strict: false});
 
 var auth = new mongoDb.Schema({
       username:String,
       password:String
     });
-    
-    
+
+
 var learningObjectiveSchema = new mongoDb.Schema({
     learningObjectiveId: Number
     , learningObjectiveName: {type: String}
     , score: Number
-});
+}, {strict: false});
 
 var learningGroupSchema = new mongoDb.Schema({
     learningGroupId: Number
     , learningGroupName: {type: String}
     , content: String
-});
+}, {strict: false});
 
 var User = mongoDb.model('User', userSchema);
 var Competency = mongoDb.model('Competency', competencySchema);
@@ -207,7 +207,7 @@ app.post('/signup', function(req, res){
 
 app.post('/updateCompetency', function(req, res){
     var tags = req.body;
-    Competency.find({}, function(err, results){
+    Competency.find({'userId': 1}, function(err, results){
         _.each(results, function(competency) {
           if(_.contains(tags, competency['competencyName'])) {
               competency['score'] = competency['score'] + 1;
@@ -221,7 +221,7 @@ app.post('/updateCompetency', function(req, res){
 
 app.post('/updateLearningObjective', function(req, res){
     var tags = req.body;
-    LearningObjective.find({}, function(err, results){
+    LearningObjective.find({'userId': 1}, function(err, results){
         _.each(results, function(learningObjective) {
           if(_.contains(tags, learningObjective['learningObjectiveName'])) {
               learningObjective['score'] = learningObjective['score'] + 1;
@@ -231,6 +231,16 @@ app.post('/updateLearningObjective', function(req, res){
         };
         });
     });
+});
+
+app.post('/updateQuestionStatus', function(req, res){
+    var question_id = req.body;
+    User.find({'userId' : 1}, function(err, user){
+              user['questionIdsToAvoid'].push(question_id);
+              user.save(function(err, user) {
+              if (err) return console.error(err);
+          });
+        });
 });
 
 app.get('/what-to-answer', function(req, res){
