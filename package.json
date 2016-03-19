@@ -6,6 +6,7 @@
     "body-parser": "~1.13.2",
     "ejs": "*",
     "express": "*",
+	"express-session":"*",
     "request": "*",
     "session": "*",
     "stackexchange": "^0.3.0",
