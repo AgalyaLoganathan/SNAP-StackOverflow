@@ -102,7 +102,7 @@
 
             <div class="panel-body" ng-controller="CompetencyListController">
               <span ng-repeat="competency in competency_list">
-                <button class="btn btn-success">
+                <button class="btn btn-success" ng-click="removeCompetency(competency)">
                     {{competency}} <span class="badge">x</span>
                 </button>&nbsp;
               </span>
@@ -127,7 +127,7 @@
 
             <div class="panel-body" ng-controller="LearningListController">
               <span ng-repeat="learning in learning_list">
-                <button class="btn btn-danger">
+                <button class="btn btn-danger" ng-click="removeToLearnElement(learning)">
                     {{learning}} <span class="badge">x</span>
                 </button>&nbsp;
               </span>
