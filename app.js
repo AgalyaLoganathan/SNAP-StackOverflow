@@ -135,10 +135,23 @@ app.post('/updateCompetency', function(req, res){
     var tags = req.body;
     Competency.find({}, function(err, results){
         _.each(results, function(competency) {
-          console.log(_.contains(tags, competency['competencyName']));
           if(_.contains(tags, competency['competencyName'])) {
               competency['score'] = competency['score'] + 1;
               competency.save(function(err, competency) {
+              if (err) return console.error(err);
+          });
+        };
+        });
+    });
+});
+
+app.post('/updateLearningObjective', function(req, res){
+    var tags = req.body;
+    LearningObjective.find({}, function(err, results){
+        _.each(results, function(learningObjective) {
+          if(_.contains(tags, learningObjective['learningObjectiveName'])) {
+              learningObjective['score'] = learningObjective['score'] + 1;
+              learningObjective.save(function(err, learningObjective) {
               if (err) return console.error(err);
           });
         };
