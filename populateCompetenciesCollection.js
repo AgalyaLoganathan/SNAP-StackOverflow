@@ -1,9 +1,13 @@
+// This script saves all tags from stackoverflow. 
+// Sadly Stackoverflow blocks its API after certain number of requests.
+// So not all tags can be saved.
+
 var stackexchange = require('stackexchange');
 var options = { version: 2.2 };
 var context = new stackexchange(options);
 var mongoDb = require('mongoose');
 
-mongoDb.connect('mongodb://localhost/snap_stackoverflow');
+mongoDb.connect('mongodb://localhost/snap_tags');
 var connection = mongoDb.connection;
 var competencySchema = new mongoDb.Schema({
     competencyId: Number, 
@@ -14,7 +18,7 @@ var Competency = mongoDb.model('Competency', competencySchema);
 
 filter = {
 	page:1,
-    pagesize: 20,
+    pagesize: 100,
     sort: 'popular',
     order: 'desc'
 };
