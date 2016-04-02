@@ -227,7 +227,6 @@ app.post('/updateCompetency', function(req, res){
         };
         });
     });
-});
 
 /* app.post('/updateLearningObjective', function(req, res){
     var tags = req.body;
