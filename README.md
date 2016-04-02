@@ -7,5 +7,32 @@ SNAP - A StackOverflow based Learning System
     db.competencies.update({}, {$set: {'userId' : 1}}, false, true)
     db.learninggroups.update({}, {$set: {'userId' : 1}}, false, true)
     db.learningobjectives.update({}, {$set: {'userId' : 1}}, false, true)
+    db.users.update({}, {$set: {'score' : 0}}, false, true)
+============== Run the following to update latest schema changes ====================
+5. Run the following:
+    db.users.remove({})
+    db.learningobjectives.remove({})
+    db.competencies.update({userId: 1}, {$unset: {score: "", userId: ""}})
+    db.createCollection("users", {
+            userId: Number,
+            userName: { type: String },
+            accountId: Number,
+            questionIdsToAvoid : [Number],
+            learningGroupIds : [Number],
+            competencies: [{competencyId: Number,
+                            score: Number}]
+            })
+
+    db.users.insert({
+        userId: 1,
+        userName: "test",
+        accountId: 1,
+        questionIdsToAvoid: [10],
+        learningGroupIds: [],
+        competencies: [{
+            competencyId: 1,
+            score: 0
+        }]
+    })
 
 **README coming soon**
