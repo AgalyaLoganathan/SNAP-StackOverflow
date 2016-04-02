@@ -46,28 +46,26 @@ app.use(session({secret: '1234567890QWERTY'}));
 mongoDb.connect('mongodb://localhost/snap_stackoverflow');
 var connection = mongoDb.connection;
 var userSchema = new mongoDb.Schema({
-      userId: Number
-      , userName: { type: String }
-      , accountId: Number
-      , questionIdsToAvoid : [Number]
-      , competencyIds : [Number]
-      , learningObjectiveIds : [Number]
-      , learningGroupIds : [Number]
-      });
+  userId: Number,
+  userName: { type: String },
+  accountId: Number,
+  questionIdsToAvoid : [Number],
+  learningGroupIds : [Number],
+  competencies: [{competencyId: Number, score: Number}]
+});
 
 var competencySchema = new mongoDb.Schema({
-    competencyId: Number
-    , competencyName: {type: String}
-    , score: Number
-}, {strict: false});
+  competencyId: Number,
+  competencyName: {type: String}
+});
 
 var auth = new mongoDb.Schema({
-      username:String,
-      password:String
-    });
+  username:String,
+  password:String
+});
 
 
-var learningObjectiveSchema = new mongoDb.Schema({
+/*var learningObjectiveSchema = new mongoDb.Schema({
     learningObjectiveId: Number
     , learningObjectiveName: {type: String}
     , score: Number
@@ -77,17 +75,17 @@ var learningGroupSchema = new mongoDb.Schema({
     learningGroupId: Number
     , learningGroupName: {type: String}
     , content: String
-}, {strict: false});
+}, {strict: false});*/
 
 var User = mongoDb.model('User', userSchema);
 var Competency = mongoDb.model('Competency', competencySchema);
-var LearningObjective = mongoDb.model('LearningObjective', learningObjectiveSchema);
-var LearningGroup = mongoDb.model('LearningGroup', learningGroupSchema);
+//var LearningObjective = mongoDb.model('LearningObjective', learningObjectiveSchema);
+//var LearningGroup = mongoDb.model('LearningGroup', learningGroupSchema);
 
 var createDbSchema = function(){
 /* This is the code to use the schema to create a model and populate the model.
    Once the first entry is created, we could see that reflected in our local database */
-
+   /*
     var firstUser = new User({
             userId: 1
           , userName: "testMe"
@@ -131,7 +129,7 @@ var createDbSchema = function(){
     sampleLearningGroup.save(function(err, sampleLearningGroup) {
       if (err) return console.error(err);
       console.log(sampleLearningGroup);
-    });
+    });*/
 };
 
 // var secret = 'SessionSecret';
@@ -191,7 +189,20 @@ app.post('/signup', function(req, res){
         "username":username,
         "password":password
       });
+      var initUser = new User({
+        "userId": 1,
+        "userName": username,
+        "accountId": 1,
+        "questionIdsToAvoid": [],
+        "learningGroupIds": [],
+        "competencies": [{"competencyId": 1, "score": 75},{"competencyId": 2, "score": 25}]
+      });
 
+      initUser.save(function(err){
+        if(err) {
+          res.render('signup.ejs', {message:'Server error. Try again.'});
+        }
+      });
       toInsert.save(function(err){
         if(err) {
           res.render('signup.ejs', {message:'Server error. Try again.'});
@@ -318,9 +329,38 @@ app.get('/dashboard', function(req, res){
     res.render('login.ejs', {message:'Please login first'});
 });
 app.get('/profile', function(req, res){
-  if(req.session.user_id)
-    res.sendFile(__dirname + '/views/graph.html');
-  else
+  var graphMessage = [];
+  if(req.session.user_id) {
+    var username = req.session.user_id;
+    User.findOne({"userName":username}, function(err, user){
+      if(err || user == undefined) {
+        res.sendFile(__dirname + '/views/dashboard.html');
+      }
+      var competencies = user.competencies;
+      var query = [];
+      for(var i=0;i<competencies.length;i++) {
+        query.push(competencies[i].competencyId);
+      }      
+      Competency.find({"competencyId": {$in:query}}, function(err, competency){
+
+          if(err) {
+            res.sendFile(__dirname + '/views/dashboard.html');
+          }
+          for(var i=0; i<competency.length; i++) {
+            var competencyName = competency[i].competencyName;
+            var s = 0;
+            for(var j=0; j<competencies.length; j++) {
+              if(competencies[j].competencyId == competency[i].competencyId) {
+                s = competencies[j].score;
+                break;
+              }
+            }
+            graphMessage.push({topic:competencyName, score:s});
+          }
+          res.render('graph.ejs', {message:graphMessage});
+      });
+    });
+  } else
     res.render('login.ejs', {message:'Please login first'});
 });
 app.get('/logout', function(req, res){

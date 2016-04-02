@@ -1,65 +1,9 @@
 window.onresize = resizeChart;
-var competency = [
-  {
-    topic: 'Facebook',
-    score: 100
-  },
-  {
-    topic: 'Instagram',
-    score: 25
-  },
-  {
-    topic: 'ReDddit',
-    score: 65
-  },
-  {
-    topic: 'AH',
-    score: 23
-  },
-  {
-    topic: 'BG',
-    score: 76
-  },
-  {
-    topic: 'CF',
-    score: 23
-  },
-  {
-    topic: 'E',
-    score: 67
-  },
-  {
-    topic: 'Snapchat',
-    score: 42
-  },
-  {
-    topic: 'Twitter',
-    score: 45
-  },
-  {
-    topic: 'Reddit',
-    score: 65
-  },
-  {
-    topic: 'A',
-    score: 23
-  },
-  {
-    topic: 'B',
-    score: 76
-  },
-  {
-    topic: 'C',
-    score: 23
-  },
-  {
-    topic: 'D',
-    score: 67
-  }
-];
+var competency = [];
+
 
 function barChart() {
-    var threshold = 65;
+    var threshold = 75;
     var width = $('.chart').width();
     var height = competency.length * 25;
     var padding = 20;
@@ -77,9 +21,7 @@ function barChart() {
         return d.score;
     });
     var xScale = d3.scale.linear()
-        .domain([0, d3.max(competency, function(d) {
-            return d.score
-        })])
+        .domain([0, 100])
         .range([0, w - padding])
     var yScale = d3.scale.ordinal()
         .domain(d3.range(0, competency.length))
@@ -221,9 +163,16 @@ function barChart() {
         .duration(800)
         .attr('opacity', 1);
 }
-//Remove SVG
+
+barChart();
+
 function resizeChart() {
     $('svg').remove();
     barChart();
 }
-barChart();
+
+function setCompetency(c) {
+    $('svg').remove();
+    competency = c;
+    barChart();
+}
