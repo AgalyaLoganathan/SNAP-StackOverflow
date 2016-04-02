@@ -161,7 +161,7 @@ app.post('/login', function(req, res){
     }
     if(user) {
       req.session.user_id = username;
-      res.redirect('/dashboard');     
+      res.redirect('/dashboard');
     }
     else {
       res.render('login.ejs', {message:'Incorrect user name or password.'});
@@ -191,7 +191,7 @@ app.post('/signup', function(req, res){
         "username":username,
         "password":password
       });
-  
+
       toInsert.save(function(err){
         if(err) {
           res.render('signup.ejs', {message:'Server error. Try again.'});
@@ -207,11 +207,21 @@ app.post('/signup', function(req, res){
 
 app.post('/updateCompetency', function(req, res){
     var tags = req.body;
-    Competency.find({'userId': 1}, function(err, results){
-        _.each(results, function(competency) {
-          if(_.contains(tags, competency['competencyName'])) {
-              competency['score'] = competency['score'] + 1;
-              competency.save(function(err, competency) {
+    Users.find({'userId': 1}, function(err, results){
+        var competencyDetails = Competencies.find(
+              {'competencyName' : { $in: [tags] } }
+              );
+        });
+
+        var competencyIds = _.select(competencyDetails, function(competency){
+            return competency['competencyId']
+        });
+
+        var userCompetencies = userDetails['competencies'];
+        _.each(userCompetencies, function(userCompetency) {
+          if(_.contains([1], userCompetency['competencyId'])) {
+              userCompetency['score'] = userCompetency['score'] + 1;
+              userCompetency.save(function(err, userCompetency) {
               if (err) return console.error(err);
           });
         };
@@ -219,7 +229,7 @@ app.post('/updateCompetency', function(req, res){
     });
 });
 
-app.post('/updateLearningObjective', function(req, res){
+/* app.post('/updateLearningObjective', function(req, res){
     var tags = req.body;
     LearningObjective.find({'userId': 1}, function(err, results){
         _.each(results, function(learningObjective) {
@@ -231,7 +241,7 @@ app.post('/updateLearningObjective', function(req, res){
         };
         });
     });
-});
+}); */
 
 app.post('/updateQuestionStatus', function(req, res){
     var question_id = req.body;

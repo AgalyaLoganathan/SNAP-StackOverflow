@@ -4,6 +4,7 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
     $http.get('/what-to-answer').success(function(data){
         $scope.questions_to_answer = data;
     });
+
   $scope.updateCompetency = function(question_id) {
     for (var i = 0; i < $scope.questions_to_answer.length; i++) {
       if($scope.questions_to_answer[i].id == question_id) {
@@ -24,7 +25,7 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
     for (var i = 0; i < $scope.questions_to_learn.length; i++) {
       if($scope.questions_to_learn[i].id == question_id) {
         var tags = $scope.questions_to_learn[i].tags;
-        $http.post('/updateLearningObjective', tags).success(function(data){
+        $http.post('/updateCompetency', tags).success(function(data){
           console.log("I guess I'm done");
         });
         break;
