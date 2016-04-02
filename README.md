@@ -8,8 +8,12 @@ SNAP - A StackOverflow based Learning System
     db.learninggroups.update({}, {$set: {'userId' : 1}}, false, true)
     db.learningobjectives.update({}, {$set: {'userId' : 1}}, false, true)
     db.users.update({}, {$set: {'score' : 0}}, false, true)
-============== Run the following to update latest schema changes ====================
-5. Run the following:
+
+Run the following to update latest schema changes 
+=================================================
+
+Run the following:
+```
     db.users.remove({})
     db.learningobjectives.remove({})
     db.competencies.update({userId: 1}, {$unset: {score: "", userId: ""}})
@@ -34,5 +38,14 @@ SNAP - A StackOverflow based Learning System
             score: 0
         }]
     })
+```
 
+Creating the competencies collection
+------------------------------------
+
+Run the `node populateCompetenciesCollection.js` command to create a new database with all competencies. Export the collection to json file in the new database using `mongoexport` command. Then run the below command to create competencies collection main database.
+
+```
+mongoimport --db snap_stackoverflow --collection competencies --type json --file tags.json
+```
 **README coming soon**
