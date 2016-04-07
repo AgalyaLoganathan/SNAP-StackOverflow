@@ -44,8 +44,6 @@ Creating the competencies collection
 ------------------------------------
 
 Run the `node populateCompetenciesCollection.js` command to create a new database with all competencies. Export the collection to json file in the new database using `mongoexport` command. Then run the below command to create competencies collection main database.
-
-<<<<<<< 5fbab7a10aa8ca7b874ca42192bbacf16716b1a2
 ```
 mongoimport --db snap_stackoverflow --collection competencies --type json --file tags.json
 ```
@@ -58,6 +56,73 @@ mongoimport --db snap_stackoverflow --collection competencies --type json --file
                 tags: [String]
             }]
             })
+
+
+============ seed data ========================
+db.competencies.insert({
+    competencyId: 11,
+    competencyName: "html"
+});
+
+db.competencies.insert({
+    competencyId: 12,
+    competencyName: "twitter-bootstrap"
+});
+
+db.competencies.insert({
+    competencyId: 13,
+    competencyName: "css"
+});
+
+db.users.insert({
+        userId: 2,
+        userName: "web-dev",
+        accountId: 1,
+        questionIdsToAvoid: [10],
+        learningGroupIds: [],
+        competencies: [{
+            competencyId: 11,
+            score: 100
+        }]
+})
+
+db.users.insert({
+        userId: 2,
+        userName: "tinylx",
+        accountId: 1,
+        questionIdsToAvoid: [10],
+        learningGroupIds: [],
+        competencies: [{
+            competencyId: 11,
+            score: 120
+        }]
+})
+
+db.users.insert({
+        userId: 2,
+        userName: "Termininja",
+        accountId: 1,
+        questionIdsToAvoid: [10],
+        learningGroupIds: [],
+        competencies: [{
+            competencyId: 11,
+            score: 80
+        }]
+})
+
+db.users.insert({
+        userId: 2,
+        userName: "Rob",
+        accountId: 1,
+        questionIdsToAvoid: [10],
+        learningGroupIds: [],
+        competencies: [{
+            competencyId: 11,
+            score: 90
+        }]
+})
+
+
 
 
 **README coming soon**

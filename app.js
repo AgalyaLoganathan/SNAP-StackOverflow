@@ -258,13 +258,13 @@ app.post('/updateCompetency', function(req, res){
 
 app.get('/getExperts', function(req, res){
   var results = [{'userId': 1,
-            'userName': 'test'},
+            'userName': 'web-dev'},
               {'userId': 2,
-            'userName': 'test2'},
+            'userName': 'tinylx'},
             {'userId': 3,
-            'userName': 'test3'},
+            'userName': 'Termininja'},
             {'userId': 4,
-            'userName': 'test4'}];
+            'userName': 'Rob'}];
   res.json(results);
   // var tags = req.body;
   // var competencyDetails = Competency.find(
