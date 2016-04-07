@@ -9,7 +9,7 @@ SNAP - A StackOverflow based Learning System
     db.learningobjectives.update({}, {$set: {'userId' : 1}}, false, true)
     db.users.update({}, {$set: {'score' : 0}}, false, true)
 
-Run the following to update latest schema changes 
+Run the following to update latest schema changes
 =================================================
 
 Run the following:
@@ -45,7 +45,19 @@ Creating the competencies collection
 
 Run the `node populateCompetenciesCollection.js` command to create a new database with all competencies. Export the collection to json file in the new database using `mongoexport` command. Then run the below command to create competencies collection main database.
 
+<<<<<<< 5fbab7a10aa8ca7b874ca42192bbacf16716b1a2
 ```
 mongoimport --db snap_stackoverflow --collection competencies --type json --file tags.json
 ```
+=======
+    db.createCollection("expertNotifications", {
+            userId: Number,
+            questions: [{
+                questionId: Number,
+                questionText: String,
+                tags: [String]
+            }]
+            })
+
+
 **README coming soon**

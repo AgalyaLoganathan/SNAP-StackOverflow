@@ -218,8 +218,8 @@ app.post('/signup', function(req, res){
 
 app.post('/updateCompetency', function(req, res){
     var tags = req.body;
-    Users.find({'userId': 1}, function(err, results){
-        var competencyDetails = Competencies.find(
+    User.find({'userId': 1}, function(err, results){
+        var competencyDetails = Competency.find(
               {'competencyName' : { $in: [tags] } }
               );
         });
@@ -253,6 +253,50 @@ app.post('/updateCompetency', function(req, res){
     });
 }); */
 
+app.get('/getExperts', function(req, res){
+  var results = [{'userId': 1,
+            'userName': 'test'},
+              {'userId': 2,
+            'userName': 'test2'},
+            {'userId': 3,
+            'userName': 'test3'},
+            {'userId': 4,
+            'userName': 'test4'}];
+  res.json(results);
+  // var tags = req.body;
+  // var competencyDetails = Competency.find(
+  //             {'competencyName' : { $in: [tags] } }
+  //             );
+  // console.log("competency " +competencyDetails);
+  // var competencyIds = _.each(competencyDetails, function(competency){
+  //     return competency['competencyId']
+  // });
+
+  // User.find(function(err, userDetails){
+  //   var experts= [];
+  //   _.each(userDetails, function(userDetail){
+  //     var userCompetencies = userDetail['competencies'];
+  //     if(_.contains(competencyIds, userCompetencies['competencyId'])){
+  //         if(userCompetencies['score'] > 1) {
+  //             experts.add(userDetail);
+  //         }
+  //     }
+  //   });
+  //   return experts;
+  // });
+});
+
+app.post('/notifyExperts', function(req, res){
+  var experts = req.body;
+  _.each(experts, function(expert) {
+    ExpertNotifications.save(expert);
+    });
+});
+
+app.get('/listExpertNotifications', function(req, res){
+
+});
+
 app.post('/updateQuestionStatus', function(req, res){
     var question_id = req.body;
     User.find({'userId' : 1}, function(err, user){
@@ -264,32 +308,50 @@ app.post('/updateQuestionStatus', function(req, res){
 });
 
 app.get('/what-to-answer', function(req, res){
-    var relatedTags = [];
-    context.tags.related(filter_for_tags, function(err, results){
-    if (err) {
-              var data = [];
-              context.tags.faq(filter_for_answering, function(err, results){
-              if (err) {
-                  res.json(data);
-              } else {
-                  for(i = 0; i < 51; i++) {
-                  if(results.items[i].answer_count <= 2) {
-                  var d = {'id': i,
-                          'link': results.items[i].link,
-                          'question': results.items[i].title,
-                          'tags': results.items[i].tags};
-                  data.push(d);
-                  }
-              }
-          }
-          }, relatedTags);
-} else {
-    for(i = 0;i<4;i++){
-      // Fetch 3 related tags; more than this wouldn't give proper results since tags are diverse
-      relatedTags.push(results.items[i].name);
-    }
-  }
-  }, ['jquery']);
+  var questions_to_answer = [
+   {
+     question:'Input widths on Bootstrap 3',
+     tags:['css','twitter-bootstrap','twitter-bootstrap-3'],
+     link:'http://stackoverflow.com/questions/18539711/input-widths-on-bootstrap-3'
+   },
+   {
+     question:'Form inline inside a form horizontal in twitter bootstrap?',
+     tags:['html','forms','twitter-bootstrap'],
+     link:'http://stackoverflow.com/questions/12201835/form-inline-inside-a-form-horizontal-in-twitter-bootstrap'
+   },
+   {
+     question:'How to center a inline form bootstrap 3',
+     tags:['html', 'css', 'twitter-bootstrap-3'],
+     link:'http://stackoverflow.com/questions/26102910/how-to-center-a-inline-form-bootstrap-3'
+   }
+ ];
+ res.json(questions_to_answer);
+//     var relatedTags = [];
+//     context.tags.related(filter_for_tags, function(err, results){
+//     if (err) {
+//               var data = [];
+//               context.tags.faq(filter_for_answering, function(err, results){
+//               if (err) {
+//                   res.json(data);
+//               } else {
+//                   for(i = 0; i < 51; i++) {
+//                   if(results.items[i].answer_count <= 2) {
+//                   var d = {'id': i,
+//                           'link': results.items[i].link,
+//                           'question': results.items[i].title,
+//                           'tags': results.items[i].tags};
+//                   data.push(d);
+//                   }
+//               }
+//           }
+//           }, relatedTags);
+// } else {
+//     for(i = 0;i<4;i++){
+//       // Fetch 3 related tags; more than this wouldn't give proper results since tags are diverse
+//       relatedTags.push(results.items[i].name);
+//     }
+//   }
+//   }, ['jquery']);
 });
 
 
@@ -328,6 +390,7 @@ app.get('/dashboard', function(req, res){
   else
     res.render('login.ejs', {message:'Please login first'});
 });
+
 app.get('/profile', function(req, res){
   var graphMessage = [];
   if(req.session.user_id) {
@@ -363,6 +426,14 @@ app.get('/profile', function(req, res){
   } else
     res.render('login.ejs', {message:'Please login first'});
 });
+
+app.get('/expertNotifications', function(req, res){
+  if(req.session.user_id)
+    res.sendFile(__dirname + '/views/notifications.html');
+  else
+    res.render('login.ejs', {message:'Please login first'});
+});
+
 app.get('/logout', function(req, res){
   delete req.session.user_id;
   res.redirect('/login');

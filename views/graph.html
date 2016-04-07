@@ -45,7 +45,6 @@
 
   	<div class="container absolute-center is-responsive">
       <div class="row row-content">
-        
         <div class="panel panel-default">
         	<div class="panel-heading">Your Competency Graph</div>
         	<div class="panel-body">
@@ -56,11 +55,5 @@
       </div>
   	</div>
     <script src="js/competency-graph.js" charset="utf-8"></script>
-    <script type="text/javascript">
-      $( document ).ready(function() {
-        var c = <%- JSON.stringify(message)%>;
-        setCompetency(c);
-      });
-    </script>
   </body>
  </html>

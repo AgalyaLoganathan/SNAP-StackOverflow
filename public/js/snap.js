@@ -16,6 +16,21 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
       }
     }
   };
+  $scope.listExperts = function(tags){
+    $http.get('/getExperts', tags).success(function(data){
+          $scope.expertsList = data;
+          console.log(data);
+    });
+    $('div.experts-list').show();
+  };
+
+  $scope.notifyExperts = function(experts){
+    console.log("Experts " + experts);
+    $http.post('/notifyExperts', experts).success(function(data){
+
+    });
+    $(".expert-notified").show().delay(3000).fadeOut();
+  }
 }])
 .controller('WhatToLearnController', ['$scope', '$http',  function($scope, $http) {
     $http.get('/what-to-learn').success(function(data){
