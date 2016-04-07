@@ -9,13 +9,15 @@ var stackexchange = require('stackexchange');
 var options = { version: 2.2 };
 var context = new stackexchange(options);
 var filter = {
-  limit: 10,
-  pagesize: 10,
+  key: 'zENiiAyyY12j)fYECBVEbw((',
+  limit: 50,
+  pagesize: 5,
   sort: 'activity',
   order: 'asc'
 };
 
 var filter_for_answering = {
+  key: 'zENiiAyyY12j)fYECBVEbw((',
   limit: 50,
   pagesize: 50,
   sort: 'activity',
@@ -23,7 +25,8 @@ var filter_for_answering = {
 };
 
 var filter_for_tags = {
-  limit: 10,
+  key: 'zENiiAyyY12j)fYECBVEbw((',
+  limit: 50,
   pagesize: 3,
   sort: 'activity',
   order: 'asc'
@@ -298,9 +301,13 @@ app.get('/listExpertNotifications', function(req, res){
 });
 
 app.post('/updateQuestionStatus', function(req, res){
+    console.log('Readched here');
     var question_id = req.body;
-    User.find({'userId' : 1}, function(err, user){
-              user['questionIdsToAvoid'].push(question_id);
+    var id = parseInt(question_id['question_id']);
+    
+    User.findOne({'userId' : 1}, function(err, user){
+              console.log(user);    
+              user['questionIdsToAvoid'].push(id);
               user.save(function(err, user) {
               if (err) return console.error(err);
           });
@@ -358,31 +365,50 @@ app.get('/what-to-answer', function(req, res){
 app.get('/what-to-learn', function(req, res){
     var relatedTags = [];
     context.tags.related(filter_for_tags, function(err, results){
-    if (err) {
+    if (err) { 
+              User.findOne({'userId' : 1}, function(err, user){  
               var data = [];
               context.tags.faq(filter, function(err, results){
               if (err) {
                   res.json(data);
               } else {
-              for(i = 0; i < 11; i++) {
-                  if(results.items[i].is_answered == true) {
-                  var d = {'id': i,
+                i=0;
+                var pc=0;
+                while(true){
+                  for(k=0;k<user['questionIdsToAvoid'].length;k++)
+                  {
+                    if(i==user['questionIdsToAvoid'][k])
+                      break;
+                  }
+                    if(k== user['questionIdsToAvoid'].length)
+                    {  
+                      if(results.items[i].is_answered == true) {
+                      var d = {'id': i,
                           'link': results.items[i].link,
                           'question': results.items[i].title,
                           'tags': results.items[i].tags};
-                  data.push(d);
-                  }
+                      data.push(d);
+                      pc++;
+                      if(pc==6)
+                      break;
+                      }
+                    }
+                 i++;
+                }
               }
-          }
           }, relatedTags);
+    });          
 } else {
     for(i = 0;i<4;i++){
       // Fetch 3 related tags; more than this wouldn't give proper results since tags are diverse
       relatedTags.push(results.items[i].name);
     }
   }
+
   }, ['android']);
+  
 });
+
 
 app.get('/dashboard', function(req, res){
   if(req.session.user_id)

@@ -16,6 +16,11 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
       }
     }
   };
+  $scope.updateQuestionStatus=function(question_id){
+    $http.post('/updateQuestionStatus',{question_id}).success(function(data){
+    console.log("I guess I'm done");
+    });   
+   };
   $scope.listExperts = function(tags){
     $http.get('/getExperts', tags).success(function(data){
           $scope.expertsList = data;
@@ -47,6 +52,11 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
       }
     }
   };
+  $scope.updateQuestionStatus=function(question_id){
+    $http.post('/updateQuestionStatus',{question_id}).success(function(data){
+    console.log("I guess I'm done");
+  });   
+   };
 }])
 .controller('CompetencyListController', ['$scope', function($scope) {
   var competency_list = ['html','twitter-bootstrap','css'];

@@ -78,7 +78,7 @@
               <div class="panel panel-default" ng-repeat="question in questions_to_answer">
                 <div class="panel-body">
                   <div class="row">
-                    <button type="button" class="btn btn-danger pull-right btn-xs" aria-label="Left Align" style="position:relative;top:0;right:0;" ng-click="deleteQuestion(question.id)">
+                    <button type="button" class="btn btn-danger pull-right btn-xs" aria-label="Left Align" style="position:relative;top:0;right:0;" ng-click="updateQuestionStatus(question.id)">
                      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                      </button>
                   </div>
@@ -107,7 +107,7 @@
               <div class="panel panel-default" ng-repeat="question in questions_to_learn">
                 <div class="panel-body">
                   <div class="row">
-                    <button type="button" class="btn btn-danger pull-right btn-xs" aria-label="Left Align" style="position:relative;top:0;right:0;" ng-click="deleteQuestion(question.id)">
+                    <button type="button" class="btn btn-danger pull-right btn-xs" aria-label="Left Align" style="position:relative;top:0;right:0;" ng-click="updateQuestionStatus(question.id)">
                      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                      </button>
                   </div>
