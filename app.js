@@ -289,6 +289,35 @@ app.get('/getExperts', function(req, res){
   // });
 });
 
+app.get('/did-you-know', function(req, res){
+   var relatedTags = [];
+   context.tags.related(filter_for_tags, function(err, results){
+   if (err) {
+             var data = [];
+             context.tags.faq(filter, function(err, results){
+             if (err) {
+                 res.json(data);
+             } else {
+             for(i = 0; i < 11; i++) {
+                 if(results.items[i].is_answered == true) {
+                 var d = {'id': i,
+                         'link': results.items[i].link,
+                         'question': results.items[i].title,
+                         'tags': results.items[i].tags};
+                 data.push(d);
+                 }
+             }
+         }
+         }, relatedTags);
+} else {
+   for(i = 0;i<4;i++){
+     // Fetch 3 related tags; more than this wouldn't give proper results since tags are diverse
+     relatedTags.push(results.items[i].name);
+   }
+ }
+}, ['html']);
+});
+
 app.post('/notifyExperts', function(req, res){
   var experts = req.body;
   _.each(experts, function(expert) {
@@ -304,9 +333,9 @@ app.post('/updateQuestionStatus', function(req, res){
     console.log('Readched here');
     var question_id = req.body;
     var id = parseInt(question_id['question_id']);
-    
+
     User.findOne({'userId' : 1}, function(err, user){
-              console.log(user);    
+              console.log(user);
               user['questionIdsToAvoid'].push(id);
               user.save(function(err, user) {
               if (err) return console.error(err);
@@ -365,8 +394,8 @@ app.get('/what-to-answer', function(req, res){
 app.get('/what-to-learn', function(req, res){
     var relatedTags = [];
     context.tags.related(filter_for_tags, function(err, results){
-    if (err) { 
-              User.findOne({'userId' : 1}, function(err, user){  
+    if (err) {
+              User.findOne({'userId' : 1}, function(err, user){
               var data = [];
               context.tags.faq(filter, function(err, results){
               if (err) {
@@ -381,7 +410,7 @@ app.get('/what-to-learn', function(req, res){
                       break;
                   }
                     if(k== user['questionIdsToAvoid'].length)
-                    {  
+                    {
                       if(results.items[i].is_answered == true) {
                       var d = {'id': i,
                           'link': results.items[i].link,
@@ -397,7 +426,7 @@ app.get('/what-to-learn', function(req, res){
                 }
               }
           }, relatedTags);
-    });          
+    });
 } else {
     for(i = 0;i<4;i++){
       // Fetch 3 related tags; more than this wouldn't give proper results since tags are diverse
@@ -406,7 +435,7 @@ app.get('/what-to-learn', function(req, res){
   }
 
   }, ['android']);
-  
+
 });
 
 
@@ -429,7 +458,7 @@ app.get('/profile', function(req, res){
       var query = [];
       for(var i=0;i<competencies.length;i++) {
         query.push(competencies[i].competencyId);
-      }      
+      }
       Competency.find({"competencyId": {$in:query}}, function(err, competency){
 
           if(err) {

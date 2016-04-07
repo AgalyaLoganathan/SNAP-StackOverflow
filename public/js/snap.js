@@ -19,7 +19,7 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
   $scope.updateQuestionStatus=function(question_id){
     $http.post('/updateQuestionStatus',{question_id}).success(function(data){
     console.log("I guess I'm done");
-    });   
+    });
    };
   $scope.listExperts = function(tags){
     $http.get('/getExperts', tags).success(function(data){
@@ -34,7 +34,8 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
     $http.post('/notifyExperts', experts).success(function(data){
 
     });
-    $(".expert-notified").show().delay(3000).fadeOut();
+    $(".expert-notified").show().delay(2000).fadeOut();
+    $('div.experts-list').hide();
   }
 }])
 .controller('WhatToLearnController', ['$scope', '$http',  function($scope, $http) {
@@ -55,7 +56,7 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
   $scope.updateQuestionStatus=function(question_id){
     $http.post('/updateQuestionStatus',{question_id}).success(function(data){
     console.log("I guess I'm done");
-  });   
+  });
    };
 }])
 .controller('CompetencyListController', ['$scope', function($scope) {
@@ -80,3 +81,8 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
       console.log(learning_list);
   };
 }]);
+app.controller('DidYouKnowController', ['$scope', '$http',  function($scope, $http) {
+    $http.get('/did-you-know').success(function(data){
+        $scope.did_you_know_questions = data;
+    });
+}])
