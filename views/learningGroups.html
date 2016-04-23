@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="expert-notifications">
+<head>
+
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <script src="js/jquery.js"></script>
+  <script src="js/angular.js"></script>
+  <script src="js/expert-notifications.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+  <script src="js/expert-notifications.js"></script>
+</script>
+<title>SNAP - Learning System</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="login"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</a></li>
+          <li><a href="profile"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Profile</a></li>
+          <li><a><span class="glyphicon glyphicon-globe" aria-hidden="true"></span> Learning Groups</a></li>
+          <li><a href="expertNotifications"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span> Expertise Needed</a></li>
+          <li><a href="logout" ><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row row-content">
+      <h1 class="text-center">SNAP</h1>
+      <p class="lead text-center">
+        A StackOverflow based learning system
+      </p>
+    </div>
+
+    <div class="row row-content">
+      <div class="col-sm-10">
+        <div class="panel panel-default">
+          <div class="panel-heading">Learning Group</div>
+          <div class="comment">
+            <h4> Leave a Comment:</h4>
+            <form role="form">
+              <div class="form-group">
+                <textarea class="form-control" rows="3"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
+    </div>
+
+  </div>
+
+  <div class="otherGroups">
+    <h4>Other learning groups</h4>
+    <ul class="list-unstyled">
+      <li><a href="#">html</a>
+      </li>
+      <li><a href="#">twitter-bootstrap</a>
+      </li>
+      <li><a href="#">css</a>
+      </li>
+      <li><a href="#">android</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+
+</body>
+</html>

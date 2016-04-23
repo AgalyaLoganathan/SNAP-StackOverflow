@@ -524,6 +524,13 @@ app.get('/expertNotifications', function(req, res){
     res.render('login.ejs', {message:'Please login first'});
 });
 
+app.get('/learningGroups', function(req, res){
+  if(req.session.user_id)
+    res.sendFile(__dirname + '/views/learningGroups.html');
+  else
+    res.render('login.ejs', {message:'Please login first'});
+});
+
 app.get('/logout', function(req, res){
   delete req.session.user_id;
   res.redirect('/login');
