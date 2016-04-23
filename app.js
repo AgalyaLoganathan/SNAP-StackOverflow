@@ -330,8 +330,7 @@ app.get('/did-you-know', function(req, res){
 
 app.post('/notifyExperts', function(req, res){
   var experts = req.body;
-  console.log();
-  console.log(experts['question'].question);
+  
 
   _.each(experts['experts'], function(expertName){
       var note = new ExpertNotification({
@@ -364,12 +363,10 @@ app.get('/listExpertNotifications', function(req, res){
 });
 
 app.post('/updateQuestionStatus', function(req, res){
-    console.log('Readched here');
     var question_id = req.body;
     var id = parseInt(question_id['question_id']);
 
     User.findOne({'userId' : 1}, function(err, user){
-              console.log(user);
               user['questionIdsToAvoid'].push(id);
               user.save(function(err, user) {
               if (err) return console.error(err);
@@ -382,11 +379,9 @@ app.get('/what-to-answer', function(req, res){
               var data = [];
               context.tags.faq(filter_for_answering, function(err, results){
               if (err) {
-                  console.log("data collected " + data.length);
                   res.json(data);
               } else {
                   for(i = 0; i < 51; i++) {
-                  console.log("Boolean is "+ JSON.stringify(results.items[i]));
                   if(results.items[i].answer_count <= 1) {
                   var d = {'id': i,
                           'link': results.items[i].link,
@@ -401,23 +396,60 @@ app.get('/what-to-answer', function(req, res){
 
 
 app.get('/what-to-learn', function(req, res){
-    var relatedTags = ['git'];
-      var data = [];
-      context.tags.faq(filter, function(err, results){
-      if (err) {
-          res.json(data);
-      } else {
-      for(i = 0; i < 11; i++) {
-          if(results.items[i].is_answered == true) {
-          var d = {'id': i,
-                  'link': results.items[i].link,
-                  'question': results.items[i].title,
-                  'tags': results.items[i].tags};
-          data.push(d);
-          }
+
+  if(req.session.user_id) {
+    var username = req.session.user_id;
+
+    User.findOne({"userName":username}, function(err, user){
+      var obj = [];
+      if(err || user == undefined) {
+        res.render('login.ejs', {message:'Please login first'});
       }
+      var competencies = user.competencies;
+      var query = [];
+      for(var i=0;i<competencies.length;i++) {
+        query.push(competencies[i].competencyId);
+      }
+      Competency.find({"competencyId": {$in:query}}, function(err, competency){
+
+          if(err) {
+            res.sendFile(__dirname + '/views/dashboard.html');
+          }
+          for(var i=0; i<competency.length; i++) {
+            var competencyName = competency[i].competencyName;
+            var s = 0;
+            for(var j=0; j<competencies.length; j++) {
+              if(competencies[j].competencyId == competency[i].competencyId) {
+                s = competencies[j].score;
+                break;
+              }
+            }
+            if(s < 75)
+              obj.push(competencyName);
+          }
+          var data = [];
+          context.tags.faq(filter, function(err, results){
+            if (err) {
+                res.json(data);
+            } else {
+            for(i = 0; i < 11; i++) {
+                if(results.items[i].is_answered == true) {
+                var d = {'id': i,
+                        'link': results.items[i].link,
+                        'question': results.items[i].title,
+                        'tags': results.items[i].tags};
+                data.push(d);
+                  }
+              }
+            }
+          }, obj.slice(0,1));
+      });
+    });
+
   }
-  }, relatedTags);
+
+//    var relatedTags = ['git'];
+      
 });
 
 
