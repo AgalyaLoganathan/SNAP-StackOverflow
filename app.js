@@ -509,7 +509,8 @@ app.get('/profile', function(req, res){
             }
             graphMessage.push({topic:competencyName, score:s});
           }
-          res.render('graph.ejs', {message:graphMessage});
+          var msg = {'graphMessage':graphMessage, 'user':username};
+          res.render('graph.ejs', {message:msg});
       });
     });
   } else
@@ -581,6 +582,40 @@ app.post('/add-competency', function(req, res){
       });
       
     }
+});
+
+app.post('/lookup-profile', function(req, res){
+  var graphMessage = [];
+  var username = req.body['lookup-user'];
+  User.findOne({"userName":username}, function(err, user){
+    if(err || user == undefined) {
+      res.redirect('/profile');
+    }
+    var competencies = user.competencies;
+    var query = [];
+    for(var i=0;i<competencies.length;i++) {
+      query.push(competencies[i].competencyId);
+    }
+    Competency.find({"competencyId": {$in:query}}, function(err, competency){
+
+        if(err) {
+          res.sendFile(__dirname + '/views/dashboard.html');
+        }
+        for(var i=0; i<competency.length; i++) {
+          var competencyName = competency[i].competencyName;
+          var s = 0;
+          for(var j=0; j<competencies.length; j++) {
+            if(competencies[j].competencyId == competency[i].competencyId) {
+              s = competencies[j].score;
+              break;
+            }
+          }
+          graphMessage.push({topic:competencyName, score:s});
+        }
+        var msg = {'graphMessage':graphMessage, 'user':username};
+        res.render('graph.ejs', {message:msg});
+    });
+  });
 });
 
 
