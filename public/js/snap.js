@@ -1,4 +1,5 @@
-var app = angular.module('snap',[]);
+
+
 app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $http) {
     console.log("Im working");
     $http.get('/what-to-answer').success(function(data){
@@ -49,6 +50,16 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
     $(".expert-notified").show().delay(2000).fadeOut();
     $('div.experts-list').hide();
   }
+
+
+
+  $scope.listPosts = function(question){
+    $http.get('/getPosts').success(function(data){
+          $scope.postList = data;
+          console.log("Post " + );
+    });
+    $('div.posts-list').show();
+  };
 
   $scope.hoverIn = function(){
       this.hoverEdit = true;

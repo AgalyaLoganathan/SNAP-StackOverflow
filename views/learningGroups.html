@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="expert-notifications">
+<html lang="en" ng-app="groups">
 <head>
 
   <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
@@ -48,14 +48,14 @@
     <div class="row row-content">
       <div class="col-sm-10">
         <div class="panel panel-default">
-          <div class="panel-heading">Learning Group</div>
+          <div class="panel-heading posts-list">Learning Group</div>
           <div class="comment">
             <h4> Leave a Comment:</h4>
             <form role="form">
               <div class="form-group">
-                <textarea class="form-control" rows="3"></textarea>
+                <textarea id="postTextArea" class="form-control" rows="3"></textarea>
               </div>
-              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="submit" class="btn btn-primary" ng-click="postComment()">Submit</button>
             </form>
           </div>
     </div>
