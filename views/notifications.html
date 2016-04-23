@@ -48,12 +48,17 @@
       <div class="row row-content">
         <div class="col">
           <div class="panel panel-default">
-            <div class="panel-heading">What To Answer</div>
+            <div class="panel-heading">Need Expert Advise</div>
             <div class="panel-body"  style="max-height: 400px;overflow-y: scroll;" ng-controller="ExpertNotificationsController">
                <div class="panel panel-default">
                 <div class="panel-body">
                 <div class="panel panel-default" ng-repeat="question in notifications">
                 <div class="panel-body">
+                  <div class="row" style="padding:10px;">
+                    <div class="col-sm-8">
+                    <span><b><i>{{ question.personWhoAsked }}</i></b> - seeked help for : </span>
+                    </div>
+                  </div>
                   <div class="row" style="padding:10px;">
                     <div class="col-sm-8">
                       {{question.question}}

@@ -53,109 +53,6 @@
             Experts have been notified
         </div>
       </div>
-
-      <div class="row row-content">
-        <div class="col-sm-4">
-          <div class="panel panel-default">
-            <div class="panel-heading">What To Answer</div>
-            <div class="panel-body"  style="max-height: 400px;overflow-y: scroll;" ng-controller="WhatToAnswerController">
-               <div class="panel panel-default experts-list" style="display:none">
-                <div class="panel-body">
-                  <form>
-                     <span>Experts Suggestions</span>
-                     <div class="form-group row">
-                     <div class="checkbox" class="col-sm-8" ng-repeat="expert in expertsList">
-                      <label>
-                        <input type="checkbox" id="expert" value={{expert.userName}}>
-                        <span>{{expert.userName}}</span>
-                      </label>
-                      </div>
-                       <a target="_blank" class="btn btn-small ask-to-answer" href="" ng-click="notifyExperts()">Ask</a>
-                      </div>
-                    </form>
-                  </div>
-               </div>
-              <div class="panel panel-default" ng-repeat="question in questions_to_answer">
-                <div class="panel-body">
-                  <div class="row">
-                    <button type="button" class="btn btn-danger pull-right btn-xs" aria-label="Left Align" style="position:relative;top:0;right:0;" ng-click="updateQuestionStatus(question.id)">
-                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                     </button>
-                  </div>
-                  <div class="row" style="padding:10px;">
-                    <div class="col-sm-8">
-                      {{question.question}}
-                      <span style="display:inline-block" class="label label-default" ng-repeat="tag in question.tags">
-                        {{tag}}
-                      </span>
-                    </div>
-                    <div class="text-right col-sm-4">
-                      <a target="_blank" class="btn btn-primary" href="{{question.link}}" ng-click="updateCompetency(question.id)">Answer</a>
-                      <a target="_blank" class="btn btn-primary" href="" ng-click="listExperts(question.tags)" style="margin-top: 10px; margin-bottom: 10px">Ask</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-sm-4">
-          <div class="panel panel-default">
-            <div class="panel-heading">What To Learn</div>
-            <div class="panel-body" style="max-height: 400px;overflow-y: scroll;" ng-controller="WhatToLearnController">
-              <div class="panel panel-default" ng-repeat="question in questions_to_learn">
-                <div class="panel-body">
-                  <div class="row">
-                    <button type="button" class="btn btn-danger pull-right btn-xs" aria-label="Left Align" style="position:relative;top:0;right:0;" ng-click="updateQuestionStatus(question.id)">
-                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                     </button>
-                  </div>
-                  <div class="row" style="padding:10px;">
-                    <div class="col-sm-8">
-                      {{question.question}}
-                      <span style="display:inline-block" class="label label-default" ng-repeat="tag in question.tags">
-                        {{tag}}
-                      </span>
-                    </div>
-                    <div class="text-right col-sm-4">
-                      <a target="_blank" class="btn btn-primary" href="{{question.link}}" ng-click="updateLearningObjective(question.id)">Learn</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-4">
-         <div class="panel panel-default">
-         <div class="panel-heading">Did You Know</div>
-         <div class="panel-body" style="max-height: 400px;overflow-y: scroll;" ng-controller="DidYouKnowController">
-           <div class="panel panel-default" ng-repeat="question in did_you_know_questions">
-             <div class="panel-body">
-               <div class="row">
-                 <button type="button" class="btn btn-danger pull-right btn-xs" aria-label="Left Align" style="position:relative;top:0;right:0;" ng-click="deleteQuestion(question.id)">
-                   <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                 </button>
-               </div>
-               <div class="row" style="padding:10px;">
-                 <div class="col-sm-8">
-                   {{question.question}}
-                   <span style="display:inline-block" class="label label-default" ng-repeat="tag in question.tags">
-                     {{tag}}
-                   </span>
-                 </div>
-                 <div class="text-right col-sm-4">
-                   <a target="_blank" class="btn btn-primary" href="{{question.link}}" ng-click="updateLearningObjective(question.id)">Learn</a>
-                 </div>
-               </div>
-             </div>
-           </div>
-         </div>
-         <div class="panel panel-default" ng-repeat="question in did_you_know_questions">
-           </div>
-         </div>
-         </div>
       <div class="row row-content">
         <div class="col-sm-6">
           <div class="panel panel-default">
@@ -172,10 +69,10 @@
 
 
             <div class="panel-footer">
-              <form class="form-inline">
+              <form class="form-inline" action="/add-competency" method="post">
                 <div class="form-group">
                   <label class="sr-only" for="new-competency">New Competency</label>
-                  <input type="text" class="form-control" id="new-competency" placeholder="Enter new competency" />
+                  <input type="text" class="form-control" id="new-competency" name="new-competency" placeholder="Enter new competency" />
                 </div>
                 <button type="submit" class="btn btn-primary">Add</button>
               </form>
@@ -197,10 +94,10 @@
             </div>
 
             <div class="panel-footer">
-              <form class="form-inline">
+              <form class="form-inline" action="/add-objective" method="post">
                 <div class="form-group">
                   <label class="sr-only" for="new-objective">New objective</label>
-                  <input type="text" class="form-control" id="new-objective" placeholder="Enter learning objective" />
+                  <input type="text" class="form-control" id="new-objective" name="new-objective" placeholder="Enter learning objective" />
                 </div>
                 <button type="submit" class="btn btn-primary">Add</button>
               </form>
@@ -209,6 +106,130 @@
           </div>
         </div>
       </div>
+      <div class="row row-content">
+        <div class="col-sm-4">
+          <div class="panel panel-default">
+            <div class="panel-heading">What To Answer</div>
+            <div class="panel-body"  style="max-height: 600px;overflow-y: scroll;" ng-controller="WhatToAnswerController">
+               <div class="panel panel-default experts-list" style="display:none">
+                <div class="panel-body">
+                  <form id="expertsList">
+                     <span>Experts Suggestions</span>
+                     <div class="form-group row">
+                     <div class="checkbox" class="col-sm-8" ng-repeat="expert in expertsList">
+                      <label>
+                        <input type="checkbox" id="expert" value={{expert.userName}}>
+                        <span>{{expert.userName}}</span>
+                      </label>
+                      </div>
+                       <a target="_blank" class="btn btn-small ask-to-answer" href="" ng-click="notifyExperts()">Ask</a>
+                      </div>
+                    </form>
+                  </div>
+               </div>
+              <div class="panel panel-default" ng-repeat="question in questions_to_answer">
+                <div class="panel-body">
+                  <div class="row">
+                    
+                    <div class="col-sm-12 pull-right">
+                      <button type="button" class="btn btn-danger pull-right btn-xs" ng-click="updateQuestionStatus(question.id)">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                      </button>
+                    </div>
+                    
+                  </div>
+                  <div class="row" style="padding:10px;">
+                    <div class="col-sm-8" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()">
+                      {{question.question}}
+                      <br>
+                      <span ng-show="hoverEdit">
+                        <span style="display:inline-block" class="label label-default" ng-repeat="tag in question.tags">
+                          {{tag}}
+                        </span>
+                      </span>
+                    </div>
+                    <div class="text-right col-sm-4">
+                      <a target="_blank" class="btn btn-primary" href="{{question.link}}" ng-click="updateCompetency(question.id)">Answer</a>
+                      <a target="_blank" class="btn btn-primary" href="" ng-click="listExperts(question)" style="margin-top: 10px; margin-bottom: 10px">Ask</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-4">
+          <div class="panel panel-default">
+            <div class="panel-heading">What To Learn</div>
+            <div class="panel-body" style="max-height: 600px;overflow-y: scroll;" ng-controller="WhatToLearnController">
+              <div class="panel panel-default" ng-repeat="question in questions_to_learn">
+                <div class="panel-body">
+                  <div class="row">
+                    
+                    <div class="col-sm-12 pull-right">
+                      <button type="button" class="btn btn-danger pull-right btn-xs" ng-click="updateQuestionStatus(question.id)">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                      </button>
+                    </div>
+                    
+                  </div>
+                  <div class="row" style="padding:10px;">
+                    <div class="col-sm-8" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()">
+                      {{question.question}}
+                      <br>
+                      <span ng-show="hoverEdit">
+                        <span style="display:inline-block" class="label label-default" ng-repeat="tag in question.tags">
+                          {{tag}}
+                        </span>
+                      </span>
+                    </div>
+                    <div class="text-right col-sm-4">
+                      <a target="_blank" class="btn btn-primary" href="{{question.link}}" ng-click="updateLearningObjective(question.id)">Learn</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+         <div class="panel panel-default">
+         <div class="panel-heading">Did You Know</div>
+         <div class="panel-body" style="max-height: 600px;overflow-y: scroll;" ng-controller="DidYouKnowController">
+           <div class="panel panel-default" ng-repeat="question in did_you_know_questions">
+             <div class="panel-body">
+               <div class="row">
+                    
+                    <div class="col-sm-12 pull-right">
+                      <button type="button" class="btn btn-danger pull-right btn-xs" ng-click="updateQuestionStatus(question.id)">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                      </button>
+                    </div>
+                    
+               </div>
+               <div class="row" style="padding:10px;">
+                 <div class="col-sm-8" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()">
+                   {{question.question}}
+                   <br>
+                      <span ng-show="hoverEdit">
+                        <span style="display:inline-block" class="label label-default" ng-repeat="tag in question.tags">
+                          {{tag}}
+                        </span>
+                      </span>
+                 </div>
+                 <div class="text-right col-sm-4">
+                   <a target="_blank" class="btn btn-primary" href="{{question.link}}" ng-click="updateLearningObjective(question.id)">Learn</a>
+                 </div>
+               </div>
+             </div>
+           </div>
+         </div>
+         <div class="panel panel-default" ng-repeat="question in did_you_know_questions">
+           </div>
+         </div>
+         </div>
+      
     </div>
   </body>
 </html>
