@@ -37,6 +37,15 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
     $(".expert-notified").show().delay(2000).fadeOut();
     $('div.experts-list').hide();
   }
+
+  $scope.hoverIn = function(){
+      this.hoverEdit = true;
+  };
+
+  $scope.hoverOut = function(){
+      this.hoverEdit = false;
+  };
+
 }])
 .controller('WhatToLearnController', ['$scope', '$http',  function($scope, $http) {
     $http.get('/what-to-learn').success(function(data){
@@ -58,6 +67,15 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
     console.log("I guess I'm done");
   });
    };
+
+  $scope.hoverIn = function(){
+      this.hoverEdit = true;
+  };
+
+  $scope.hoverOut = function(){
+      this.hoverEdit = false;
+  };
+
 }])
 .controller('CompetencyListController', ['$scope', function($scope) {
   var competency_list = ['html','twitter-bootstrap','css'];
@@ -85,4 +103,12 @@ app.controller('DidYouKnowController', ['$scope', '$http',  function($scope, $ht
     $http.get('/did-you-know').success(function(data){
         $scope.did_you_know_questions = data;
     });
+
+  $scope.hoverIn = function(){
+      this.hoverEdit = true;
+  };
+
+  $scope.hoverOut = function(){
+      this.hoverEdit = false;
+  };
 }])
