@@ -67,6 +67,15 @@ var auth = new mongoDb.Schema({
   password:String
 });
 
+var expertNotificationSchema = new mongoDb.Schema({
+  expertName: {type: String},
+  questionId: Number,
+  question: {type: String},
+  link: {type: String},
+  tags: [String],
+  personWhoAsked: {type: String}
+});
+
 
 /*var learningObjectiveSchema = new mongoDb.Schema({
     learningObjectiveId: Number
@@ -84,6 +93,7 @@ var User = mongoDb.model('User', userSchema);
 var Competency = mongoDb.model('Competency', competencySchema);
 //var LearningObjective = mongoDb.model('LearningObjective', learningObjectiveSchema);
 //var LearningGroup = mongoDb.model('LearningGroup', learningGroupSchema);
+var ExpertNotification = mongoDb.model('ExpertNotification', expertNotificationSchema);
 
 var createDbSchema = function(){
 /* This is the code to use the schema to create a model and populate the model.
@@ -280,7 +290,7 @@ app.get('/getExperts', function(req, res){
   //   _.each(userDetails, function(userDetail){
   //     var userCompetencies = userDetail['competencies'];
   //     if(_.contains(competencyIds, userCompetencies['competencyId'])){
-  //         if(userCompetencies['score'] > 1) {
+  //         if(userCompetencies['score'] > 50) {
   //             experts.add(userDetail);
   //         }
   //     }
@@ -320,13 +330,37 @@ app.get('/did-you-know', function(req, res){
 
 app.post('/notifyExperts', function(req, res){
   var experts = req.body;
-  _.each(experts, function(expert) {
-    ExpertNotifications.save(expert);
-    });
+  console.log();
+  console.log(experts['question'].question);
+
+  _.each(experts['experts'], function(expertName){
+      var note = new ExpertNotification({
+      expertName: expertName,
+      questionId: experts['question'].questionId,
+      question: experts['question'].question,
+      link: experts['question'].link,
+      tags: experts['question'].tags,
+      personWhoAsked: req.session.user_id});
+      note.save(function(err){
+        if(err) {
+          console.log("Error saving notifications");
+          res.sendStatus(500);
+        } else {
+          console.log("Saved");
+        }
+      });
+  });
 });
 
 app.get('/listExpertNotifications', function(req, res){
-
+    var expertName = req.session.user_id;
+    ExpertNotification.find({'expertName': expertName}, function(err, notifications){
+      if(err) {
+        res.render('login.ejs');
+      } else {
+        res.json(notifications);
+      }
+    })
 });
 
 app.post('/updateQuestionStatus', function(req, res){

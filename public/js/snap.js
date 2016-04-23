@@ -16,24 +16,36 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
       }
     }
   };
+
   $scope.updateQuestionStatus=function(question_id){
     $http.post('/updateQuestionStatus',{question_id}).success(function(data){
     console.log("I guess I'm done");
     });
    };
-  $scope.listExperts = function(tags){
-    $http.get('/getExperts', tags).success(function(data){
+
+  var questionForExpert;
+  $scope.listExperts = function(question){
+    $http.get('/getExperts', question.tags).success(function(data){
           $scope.expertsList = data;
-          console.log(data);
+          questionForExpert = question;
+          console.log("Question for expert " + questionForExpert.question);
     });
     $('div.experts-list').show();
   };
 
-  $scope.notifyExperts = function(experts){
-    console.log("Experts " + experts);
-    $http.post('/notifyExperts', experts).success(function(data){
+  $scope.notifyExperts = function(){
+    var experts = ['user1', 'user2', 'user4', 'alogana1@asu.edu'];
+    var requestData = {
+      'experts' : experts,
+      'question' : questionForExpert
+    };
 
+    console.log("Req Data " + requestData['experts']);
+    console.log("Req Data " + requestData['question'].question);
+    $http.post('/notifyExperts', requestData).success(function(data){
+        console.log("Successfully notified");
     });
+    questionForExpert = "";
     $(".expert-notified").show().delay(2000).fadeOut();
     $('div.experts-list').hide();
   }

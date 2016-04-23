@@ -113,7 +113,7 @@
             <div class="panel-body"  style="max-height: 600px;overflow-y: scroll;" ng-controller="WhatToAnswerController">
                <div class="panel panel-default experts-list" style="display:none">
                 <div class="panel-body">
-                  <form>
+                  <form id="expertsList">
                      <span>Experts Suggestions</span>
                      <div class="form-group row">
                      <div class="checkbox" class="col-sm-8" ng-repeat="expert in expertsList">
@@ -150,7 +150,7 @@
                     </div>
                     <div class="text-right col-sm-4">
                       <a target="_blank" class="btn btn-primary" href="{{question.link}}" ng-click="updateCompetency(question.id)">Answer</a>
-                      <a target="_blank" class="btn btn-primary" href="" ng-click="listExperts(question.tags)" style="margin-top: 10px; margin-bottom: 10px">Ask</a>
+                      <a target="_blank" class="btn btn-primary" href="" ng-click="listExperts(question)" style="margin-top: 10px; margin-bottom: 10px">Ask</a>
                     </div>
                   </div>
                 </div>
