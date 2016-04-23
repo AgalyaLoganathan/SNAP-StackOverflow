@@ -230,27 +230,38 @@ app.post('/signup', function(req, res){
 })
 
 app.post('/updateCompetency', function(req, res){
-    var tags = req.body;
-    User.find({'userId': 1}, function(err, results){
-        var competencyDetails = Competency.find(
-              {'competencyName' : { $in: [tags] } }
-              );
-        });
-
-        var competencyIds = _.select(competencyDetails, function(competency){
-            return competency['competencyId']
-        });
-
-        var userCompetencies = userDetails['competencies'];
-        _.each(userCompetencies, function(userCompetency) {
-          if(_.contains([1], userCompetency['competencyId'])) {
-              userCompetency['score'] = userCompetency['score'] + 1;
-              userCompetency.save(function(err, userCompetency) {
+  var tags = req.body;
+  var username = req.session.user_id;
+  User.findOne({'userName': username}, function(err, user){
+      Competency.find({"competencyName": {$in:tags}}, function(err, competency){
+        if(err) {
+          res.sendFile(__dirname + '/views/dashboard.html');
+        }
+        var s;
+        var userCompetencies = user.competencies;
+        for(var i=0; i<competency.length; i++) {
+          var id = competency[i].competencyId;
+          s = 0;
+          var j;
+          for(j=0; j<userCompetencies.length; j++) {
+            if(userCompetencies[j].competencyId == competency[i].competencyId) {
+              s = 1;
+              break;
+            }
+          }
+          if(s == 0) {
+            user.competencies.push({"competencyId":id, "score":1});
+          } else {
+            var score = user.competencies[j].score;
+            user.competencies[j].score = score+1;
+          }
+          user.save(function(err, user) {
               if (err) return console.error(err);
           });
-        };
-        });
+      }
     });
+  });
+});
 
 /* app.post('/updateLearningObjective', function(req, res){
     var tags = req.body;
