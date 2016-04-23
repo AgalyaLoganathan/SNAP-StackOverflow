@@ -325,7 +325,7 @@ app.get('/did-you-know', function(req, res){
      relatedTags.push(results.items[i].name);
    }
  }
-}, ['html']);
+}, ['andriod']);
 });
 
 app.post('/notifyExperts', function(req, res){
@@ -378,98 +378,46 @@ app.post('/updateQuestionStatus', function(req, res){
 });
 
 app.get('/what-to-answer', function(req, res){
-  var questions_to_answer = [
-   {
-     question:'Input widths on Bootstrap 3',
-     tags:['css','twitter-bootstrap','twitter-bootstrap-3'],
-     link:'http://stackoverflow.com/questions/18539711/input-widths-on-bootstrap-3'
-   },
-   {
-     question:'Form inline inside a form horizontal in twitter bootstrap?',
-     tags:['html','forms','twitter-bootstrap'],
-     link:'http://stackoverflow.com/questions/12201835/form-inline-inside-a-form-horizontal-in-twitter-bootstrap'
-   },
-   {
-     question:'How to center a inline form bootstrap 3',
-     tags:['html', 'css', 'twitter-bootstrap-3'],
-     link:'http://stackoverflow.com/questions/26102910/how-to-center-a-inline-form-bootstrap-3'
-   }
- ];
- res.json(questions_to_answer);
-//     var relatedTags = [];
-//     context.tags.related(filter_for_tags, function(err, results){
-//     if (err) {
-//               var data = [];
-//               context.tags.faq(filter_for_answering, function(err, results){
-//               if (err) {
-//                   res.json(data);
-//               } else {
-//                   for(i = 0; i < 51; i++) {
-//                   if(results.items[i].answer_count <= 2) {
-//                   var d = {'id': i,
-//                           'link': results.items[i].link,
-//                           'question': results.items[i].title,
-//                           'tags': results.items[i].tags};
-//                   data.push(d);
-//                   }
-//               }
-//           }
-//           }, relatedTags);
-// } else {
-//     for(i = 0;i<4;i++){
-//       // Fetch 3 related tags; more than this wouldn't give proper results since tags are diverse
-//       relatedTags.push(results.items[i].name);
-//     }
-//   }
-//   }, ['jquery']);
+    var relatedTags = ['chef'];
+              var data = [];
+              context.tags.faq(filter_for_answering, function(err, results){
+              if (err) {
+                  console.log("data collected " + data.length);
+                  res.json(data);
+              } else {
+                  for(i = 0; i < 51; i++) {
+                  console.log("Boolean is "+ JSON.stringify(results.items[i]));
+                  if(results.items[i].answer_count <= 1) {
+                  var d = {'id': i,
+                          'link': results.items[i].link,
+                          'question': results.items[i].title,
+                          'tags': results.items[i].tags};
+                  data.push(d);
+                  }
+              }
+          }
+          }, relatedTags);
 });
 
 
 app.get('/what-to-learn', function(req, res){
-    var relatedTags = [];
-    context.tags.related(filter_for_tags, function(err, results){
-    if (err) {
-              User.findOne({'userId' : 1}, function(err, user){
-              var data = [];
-              context.tags.faq(filter, function(err, results){
-              if (err) {
-                  res.json(data);
-              } else {
-                i=0;
-                var pc=0;
-                while(true){
-                  for(k=0;k<user['questionIdsToAvoid'].length;k++)
-                  {
-                    if(i==user['questionIdsToAvoid'][k])
-                      break;
-                  }
-                    if(k== user['questionIdsToAvoid'].length)
-                    {
-                      if(results.items[i].is_answered == true) {
-                      var d = {'id': i,
-                          'link': results.items[i].link,
-                          'question': results.items[i].title,
-                          'tags': results.items[i].tags};
-                      data.push(d);
-                      pc++;
-                      if(pc==6)
-                      break;
-                      }
-                    }
-                 i++;
-                }
-              }
-          }, relatedTags);
-    });
-} else {
-    for(i = 0;i<4;i++){
-      // Fetch 3 related tags; more than this wouldn't give proper results since tags are diverse
-      relatedTags.push(results.items[i].name);
-    }
+    var relatedTags = ['git'];
+      var data = [];
+      context.tags.faq(filter, function(err, results){
+      if (err) {
+          res.json(data);
+      } else {
+      for(i = 0; i < 11; i++) {
+          if(results.items[i].is_answered == true) {
+          var d = {'id': i,
+                  'link': results.items[i].link,
+                  'question': results.items[i].title,
+                  'tags': results.items[i].tags};
+          data.push(d);
+          }
+      }
   }
-
-  }, ['android']);
-
+  }, relatedTags);
 });
 
 
