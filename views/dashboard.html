@@ -29,7 +29,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="#"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</a></li>
                 <li><a href="profile"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Profile</a></li>
-                <li><a href="learningGroups"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span> Learning Groups</a></li>
+                <li><a href="learningGroups" ng-click="listPosts"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span> Learning Groups</a></li>
                 <li><a href="expertNotifications"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span> Expertise Needed</a></li>
                 <li><a href="logout" ><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout</a></li>
             </ul>
@@ -125,13 +125,13 @@
               <div class="panel panel-default" ng-repeat="question in questions_to_answer">
                 <div class="panel-body">
                   <div class="row">
-                    
+
                     <div class="col-sm-12 pull-right">
                       <button type="button" class="btn btn-danger pull-right btn-xs" ng-click="updateQuestionStatus(question.id)">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                       </button>
                     </div>
-                    
+
                   </div>
                   <div class="row" style="padding:10px;">
                     <div class="col-sm-8" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()">
@@ -161,13 +161,13 @@
               <div class="panel panel-default" ng-repeat="question in questions_to_learn">
                 <div class="panel-body">
                   <div class="row">
-                    
+
                     <div class="col-sm-12 pull-right">
                       <button type="button" class="btn btn-danger pull-right btn-xs" ng-click="updateQuestionStatus(question.id)">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                       </button>
                     </div>
-                    
+
                   </div>
                   <div class="row" style="padding:10px;">
                     <div class="col-sm-8" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()">
@@ -195,13 +195,13 @@
            <div class="panel panel-default" ng-repeat="question in did_you_know_questions">
              <div class="panel-body">
                <div class="row">
-                    
+
                     <div class="col-sm-12 pull-right">
                       <button type="button" class="btn btn-danger pull-right btn-xs" ng-click="updateQuestionStatus(question.id)">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                       </button>
                     </div>
-                    
+
                </div>
                <div class="row" style="padding:10px;">
                  <div class="col-sm-8" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()">
@@ -224,7 +224,7 @@
            </div>
          </div>
          </div>
-      
+
     </div>
   </body>
 </html>

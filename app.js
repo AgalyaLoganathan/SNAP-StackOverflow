@@ -76,6 +76,13 @@ var expertNotificationSchema = new mongoDb.Schema({
   personWhoAsked: {type: String}
 });
 
+var learningGroupSchema = new mongoDb.Schema({
+  userName: {type: String},
+  learningGroup: {type: String},
+  verifiedBy: {type: String},
+  isVerified: {type: Boolean},
+  post: {type: String},
+});
 
 /*var learningObjectiveSchema = new mongoDb.Schema({
     learningObjectiveId: Number
@@ -94,6 +101,7 @@ var Competency = mongoDb.model('Competency', competencySchema);
 //var LearningObjective = mongoDb.model('LearningObjective', learningObjectiveSchema);
 //var LearningGroup = mongoDb.model('LearningGroup', learningGroupSchema);
 var ExpertNotification = mongoDb.model('ExpertNotification', expertNotificationSchema);
+var LearningGroup = mongoDb.model('LearningGroup', learningGroupSchema);
 
 var createDbSchema = function(){
 /* This is the code to use the schema to create a model and populate the model.
@@ -299,6 +307,21 @@ app.get('/getExperts', function(req, res){
   // });
 });
 
+app.get('/getPosts', function(req, res){
+  var learningGroup = req.body;
+  var postDetails=[];
+  learningGroup.find(function(err,learningGroupDetails){
+    var posters=[];
+    _.each(learningGroupDetails, function(err,learningGroupDetail) {
+    if(_.contains(learningGroupName,learningGroup['learningGroupName'])) {
+      postDetails.add(learningGroupDetail);
+    }
+  });
+  return postDetails;
+  });
+});
+
+
 app.get('/did-you-know', function(req, res){
    var relatedTags = [];
    context.tags.related(filter_for_tags, function(err, results){
@@ -330,7 +353,7 @@ app.get('/did-you-know', function(req, res){
 
 app.post('/notifyExperts', function(req, res){
   var experts = req.body;
-  
+
 
   _.each(experts['experts'], function(expertName){
       var note = new ExpertNotification({
@@ -360,6 +383,27 @@ app.get('/listExpertNotifications', function(req, res){
         res.json(notifications);
       }
     })
+});
+
+app.post('/postComment', function(req, res){
+  var userPost = req.body;
+  console.log();
+  console.log(userPost['post'].post);
+
+  _.each(userPost['userPost'], function(expertName){
+      var note = new LearningGroup({
+      userName: userName,
+      post: userPost['post'].post,
+      personWhoPosted: req.session.user_id});
+      note.save(function(err){
+        if(err) {
+          console.log("Error saving user post");
+          res.sendStatus(500);
+        } else {
+          console.log("Saved");
+        }
+      });
+  });
 });
 
 app.post('/updateQuestionStatus', function(req, res){
@@ -449,7 +493,7 @@ app.get('/what-to-learn', function(req, res){
   }
 
 //    var relatedTags = ['git'];
-      
+
 });
 
 
@@ -521,9 +565,9 @@ app.post('/add-objective', function(req, res){
     if(req.session.user_id) {
       var username = req.session.user_id;
       var newcompetency = req.body['new-objective'];
-      
+
       var id = 0;
-      
+
       Competency.findOne({"competencyName": newcompetency}, function(err, competency){
         if(err) {
           res.render('login.ejs', {message:'Please login first'});
@@ -540,7 +584,7 @@ app.post('/add-objective', function(req, res){
           res.redirect('/dashboard');
         });
       });
-      
+
     }
 });
 
@@ -548,9 +592,9 @@ app.post('/add-competency', function(req, res){
     if(req.session.user_id) {
       var username = req.session.user_id;
       var newcompetency = req.body['new-competency'];
-      
+
       var id = 0;
-      
+
       Competency.findOne({"competencyName": newcompetency}, function(err, competency){
         if(err) {
           res.render('login.ejs', {message:'Please login first'});
@@ -567,7 +611,7 @@ app.post('/add-competency', function(req, res){
           res.redirect('/dashboard');
         });
       });
-      
+
     }
 });
 
@@ -642,7 +686,7 @@ app.get('/get-competencies', function(req, res){
     });
 
   }
-  
+
 });
 
 
@@ -682,7 +726,7 @@ app.get('/get-learning-objectives', function(req, res){
     });
 
   }
-  
+
 });
 
 
