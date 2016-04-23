@@ -5,7 +5,7 @@ app.controller('ExpertNotificationsController', ['$scope', '$http',  function($s
 
     //     $scope.notifications = data;
     // });
-    $http.get('/what-to-answer').success(function(data){
+    $http.get('/listExpertNotifications').success(function(data){
         $scope.notifications = data;
     });
 }]);
