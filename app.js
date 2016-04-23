@@ -198,7 +198,7 @@ app.post('/signup', function(req, res){
         "accountId": 1,
         "questionIdsToAvoid": [],
         "learningGroupIds": [],
-        "competencies": [{"competencyId": 1, "score": 75},{"competencyId": 2, "score": 25}]
+        "competencies": []
       });
 
       initUser.save(function(err){
@@ -493,6 +493,142 @@ app.get('/logout', function(req, res){
   delete req.session.user_id;
   res.redirect('/login');
 });
+
+
+app.post('/add-objective', function(req, res){
+    if(req.session.user_id) {
+      var username = req.session.user_id;
+      var newcompetency = req.body['new-objective'];
+      
+      var id = 0;
+      
+      Competency.findOne({"competencyName": newcompetency}, function(err, competency){
+        if(err) {
+          res.render('login.ejs', {message:'Please login first'});
+        }
+        id = competency.competencyId;
+        User.findOne({'userName' : username}, function(err, user){
+          if(err || user == undefined) {
+             res.render('login.ejs', {message:'Please login first'});
+          }
+          user['competencies'].push({"competencyId":id, "score":0});
+          user.save(function(err, user) {
+            if (err) return console.error(err);
+          });
+          res.redirect('/dashboard');
+        });
+      });
+      
+    }
+});
+
+app.post('/add-competency', function(req, res){
+    if(req.session.user_id) {
+      var username = req.session.user_id;
+      var newcompetency = req.body['new-competency'];
+      
+      var id = 0;
+      
+      Competency.findOne({"competencyName": newcompetency}, function(err, competency){
+        if(err) {
+          res.render('login.ejs', {message:'Please login first'});
+        }
+        id = competency.competencyId;
+        User.findOne({'userName' : username}, function(err, user){
+          if(err || user == undefined) {
+             res.render('login.ejs', {message:'Please login first'});
+          }
+          user['competencies'].push({"competencyId":id, "score":75});
+          user.save(function(err, user) {
+            if (err) return console.error(err);
+          });
+          res.redirect('/dashboard');
+        });
+      });
+      
+    }
+});
+
+
+app.get('/get-competencies', function(req, res){
+  if(req.session.user_id) {
+    var username = req.session.user_id;
+
+    User.findOne({"userName":username}, function(err, user){
+      var data = [];
+      if(err || user == undefined) {
+        res.json(data);
+      }
+      var competencies = user.competencies;
+      var query = [];
+      for(var i=0;i<competencies.length;i++) {
+        query.push(competencies[i].competencyId);
+      }
+      Competency.find({"competencyId": {$in:query}}, function(err, competency){
+
+          if(err) {
+            res.sendFile(__dirname + '/views/dashboard.html');
+          }
+          for(var i=0; i<competency.length; i++) {
+            var competencyName = competency[i].competencyName;
+            var s = 0;
+            for(var j=0; j<competencies.length; j++) {
+              if(competencies[j].competencyId == competency[i].competencyId) {
+                s = competencies[j].score;
+                break;
+              }
+            }
+            if(s >= 75)
+              data.push(competencyName);
+          }
+          res.json(data);
+      });
+    });
+
+  }
+  
+});
+
+
+app.get('/get-learning-objectives', function(req, res){
+  if(req.session.user_id) {
+    var username = req.session.user_id;
+
+    User.findOne({"userName":username}, function(err, user){
+      var data = [];
+      if(err || user == undefined) {
+        res.json(data);
+      }
+      var competencies = user.competencies;
+      var query = [];
+      for(var i=0;i<competencies.length;i++) {
+        query.push(competencies[i].competencyId);
+      }
+      Competency.find({"competencyId": {$in:query}}, function(err, competency){
+
+          if(err) {
+            res.sendFile(__dirname + '/views/dashboard.html');
+          }
+          for(var i=0; i<competency.length; i++) {
+            var competencyName = competency[i].competencyName;
+            var s = 0;
+            for(var j=0; j<competencies.length; j++) {
+              if(competencies[j].competencyId == competency[i].competencyId) {
+                s = competencies[j].score;
+                break;
+              }
+            }
+            if(s < 75)
+              data.push(competencyName);
+          }
+          res.json(data);
+      });
+    });
+
+  }
+  
+});
+
 
 http.createServer(app).listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));

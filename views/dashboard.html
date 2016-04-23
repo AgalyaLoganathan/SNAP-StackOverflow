@@ -69,10 +69,10 @@
 
 
             <div class="panel-footer">
-              <form class="form-inline">
+              <form class="form-inline" action="/add-competency" method="post">
                 <div class="form-group">
                   <label class="sr-only" for="new-competency">New Competency</label>
-                  <input type="text" class="form-control" id="new-competency" placeholder="Enter new competency" />
+                  <input type="text" class="form-control" id="new-competency" name="new-competency" placeholder="Enter new competency" />
                 </div>
                 <button type="submit" class="btn btn-primary">Add</button>
               </form>
@@ -94,10 +94,10 @@
             </div>
 
             <div class="panel-footer">
-              <form class="form-inline">
+              <form class="form-inline" action="/add-objective" method="post">
                 <div class="form-group">
                   <label class="sr-only" for="new-objective">New objective</label>
-                  <input type="text" class="form-control" id="new-objective" placeholder="Enter learning objective" />
+                  <input type="text" class="form-control" id="new-objective" name="new-objective" placeholder="Enter learning objective" />
                 </div>
                 <button type="submit" class="btn btn-primary">Add</button>
               </form>

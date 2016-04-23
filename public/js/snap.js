@@ -77,9 +77,12 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
   };
 
 }])
-.controller('CompetencyListController', ['$scope', function($scope) {
-  var competency_list = ['html','twitter-bootstrap','css'];
-  $scope.competency_list = competency_list;
+.controller('CompetencyListController', ['$scope', '$http', function($scope, $http) {
+  $http.get('/get-competencies').success(function(data){
+        $scope.competency_list = data;
+    });
+  // var competency_list = ['html','twitter-bootstrap','css'];
+  // $scope.competency_list = competency_list;
   $scope.removeCompetency = function(competency) {
     console.log(competency);
       var index = competency_list.indexOf(competency);
@@ -88,9 +91,12 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
       console.log(competency_list);
   };
 }])
-.controller('LearningListController', ['$scope', function($scope) {
-  var learning_list = ['android', 'java', 'mobile app'];
-  $scope.learning_list = learning_list;
+.controller('LearningListController', ['$scope', '$http', function($scope, $http) {
+  $http.get('/get-learning-objectives').success(function(data){
+        $scope.learning_list = data;
+    });
+  //var learning_list = ['android', 'java', 'mobile app'];
+  //$scope.learning_list = learning_list;
   $scope.removeToLearnElement = function(learning) {
     console.log(learning);
       var index = learning_list.indexOf(learning);
