@@ -1,4 +1,4 @@
-
+var app = angular.module('snap',[]);
 
 app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $http) {
     console.log("Im working");
@@ -56,7 +56,7 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
   $scope.listPosts = function(question){
     $http.get('/getPosts').success(function(data){
           $scope.postList = data;
-          console.log("Post " + );
+          console.log("Post ");
     });
     $('div.posts-list').show();
   };
