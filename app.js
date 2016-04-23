@@ -253,7 +253,11 @@ app.post('/updateCompetency', function(req, res){
             user.competencies.push({"competencyId":id, "score":1});
           } else {
             var score = user.competencies[j].score;
-            user.competencies[j].score = score+1;
+            if(score == 100) {
+              // do nothing
+            } else {
+              user.competencies[j].score = score+1;
+            }
           }
           user.save(function(err, user) {
               if (err) return console.error(err);
