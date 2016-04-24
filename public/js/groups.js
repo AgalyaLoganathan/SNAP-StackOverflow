@@ -1,18 +1,18 @@
 var app = angular.module('groups',[]);
 app.controller('LearningGroupController', ['$scope', '$http',  function($scope, $http) {
-    console.log("Im working");
-    $http.get('/learningGroup').success(function(data){
-      
-    });
-  });
+    // $http.get('/learningGroup').success(function(data){
+    //   console.log("Implement this");
+    // });
 
 $scope.postComment = function(){
-  var userPost = {
-    'post' : document.getElementById("postTextArea").value
-  };
-  console.log(" Post Req Data " + requestData['userName']);
-  console.log("Post Req Data " + requestData['post'].question);
-  $http.post('/postComment', requestData).success(function(data){
+  console.log("Post data " + $scope.postText);
+  // var userPost = {
+  //   'post' : $scope.postText;
+  // };
+
+  console.log("Post Req Data " + "text");
+  $http.post('/postComment', "text").success(function(data){
       console.log("Successfully posted");
   });
 }
+}]);

@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-  <script src="js/expert-notifications.js"></script>
+  <script src="js/groups.js"></script>
 </script>
 <title>SNAP - Learning System</title>
 </head>
@@ -47,13 +47,13 @@
 
     <div class="row row-content">
       <div class="col-sm-10">
-        <div class="panel panel-default">
+        <div class="panel panel-default" ng-controller="LearningGroupController">
           <div class="panel-heading posts-list">Learning Group</div>
           <div class="comment">
             <h4> Leave a Comment:</h4>
             <form role="form">
               <div class="form-group">
-                <textarea id="postTextArea" class="form-control" rows="3"></textarea>
+                <textarea id="postTextArea" class="form-control" rows="3"></textarea ng-model="postText">
               </div>
               <button type="submit" class="btn btn-primary" ng-click="postComment()">Submit</button>
             </form>

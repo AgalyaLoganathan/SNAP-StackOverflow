@@ -77,11 +77,11 @@ var expertNotificationSchema = new mongoDb.Schema({
 });
 
 var learningGroupSchema = new mongoDb.Schema({
-  userName: {type: String},
-  learningGroup: {type: String},
-  verifiedBy: {type: String},
-  isVerified: {type: Boolean},
-  post: {type: String},
+  userName: {type: String}, // req.sessio.
+  learningGroup: {type: String}, // extract from html
+  verifiedBy: {type: String}, // ""
+  isVerified: {type: Boolean}, // false
+  post: {type: String}, // text - that comes from the form
 });
 
 /*var learningObjectiveSchema = new mongoDb.Schema({
@@ -402,7 +402,7 @@ app.get('/listExpertNotifications', function(req, res){
 
 app.post('/postComment', function(req, res){
   var userPost = req.body;
-  console.log();
+  console.log(userPost);
   console.log(userPost['post'].post);
 
   _.each(userPost['userPost'], function(expertName){
