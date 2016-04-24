@@ -323,16 +323,10 @@ app.get('/getExperts', function(req, res){
 });
 
 app.get('/getPosts', function(req, res){
-  var learningGroup = req.body;
-  var postDetails=[];
-  learningGroup.find(function(err,learningGroupDetails){
-    var posters=[];
-    _.each(learningGroupDetails, function(err,learningGroupDetail) {
-    if(_.contains(learningGroupName,learningGroup['learningGroupName'])) {
-      postDetails.add(learningGroupDetail);
-    }
-  });
-  return postDetails;
+  //var learningGroup = req.body;
+  var learningGroup = 'Java';
+  LearningGroup.find({learningGroup: learningGroup}, function(err,learningGroupDetails){
+   res.json(learningGroupDetails);
   });
 });
 

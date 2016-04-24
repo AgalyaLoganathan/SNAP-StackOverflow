@@ -1,8 +1,10 @@
 var app = angular.module('groups',[]);
 app.controller('LearningGroupController', ['$scope', '$http',  function($scope, $http) {
-    // $http.get('/learningGroup').success(function(data){
-    //   console.log("Implement this");
-    // });
+    $http.get('/getPosts').success(function(data){
+      $('div.postData').attr("disabled", true);
+      console.log("Post data is " + data);
+      $scope.posts = data;
+    });
 
 $scope.postComment = function(){
   console.log("Post data " + $scope.postText);

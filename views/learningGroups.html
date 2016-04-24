@@ -44,7 +44,43 @@
         A StackOverflow based learning system
       </p>
     </div>
-
+    <div class="row row-content">
+      <div class="col-sm-10">
+      <div class="readOnlyPostSection" style="margin-bottom: 10px; margin-top: 5px; border-radius: all;">
+      <div class="panel-body"  style="max-height: 400px;overflow-y: scroll;" ng-controller="LearningGroupController">
+               <div class="panel panel-default">
+                <div class="panel-body">
+                <div class="panel panel-default" ng-repeat="post in posts">
+                <div class="panel-body">
+                  <div class="row postData" style="padding:10px;">
+                    <div><b><i>{{post.userName }}</i></b> wrote: </div>
+                    <div class="col-sm-8">
+                      {{post.post}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-2">
+      <div class="otherGroups">
+      <h4>Other learning groups</h4>
+      <ul class="list-unstyled">
+      <li><a href="#">html</a>
+      </li>
+      <li><a href="#">twitter-bootstrap</a>
+      </li>
+      <li><a href="#">css</a>
+      </li>
+      <li><a href="#">android</a>
+      </li>
+    </ul>
+    </div>
+    </div>
+  </div>
     <div class="row row-content">
       <div class="col-sm-10">
         <div class="panel panel-default" ng-controller="LearningGroupController">
@@ -59,21 +95,6 @@
             </form>
           </div>
     </div>
-
-  </div>
-
-  <div class="otherGroups">
-    <h4>Other learning groups</h4>
-    <ul class="list-unstyled">
-      <li><a href="#">html</a>
-      </li>
-      <li><a href="#">twitter-bootstrap</a>
-      </li>
-      <li><a href="#">css</a>
-      </li>
-      <li><a href="#">android</a>
-      </li>
-    </ul>
   </div>
 </div>
 
