@@ -89,9 +89,9 @@
             <h4> Leave a Comment:</h4>
             <form role="form">
               <div class="form-group">
-                <textarea id="postTextArea" class="form-control" rows="3"></textarea ng-model="postText">
+                <textarea id="postTextArea" class="form-control" rows="3" ng-model="userPost"></textarea >
               </div>
-              <button type="submit" class="btn btn-primary" ng-click="postComment()">Submit</button>
+              <button type="submit" class="btn btn-primary" ng-click="postComment(userPost)">Submit</button>
             </form>
           </div>
     </div>

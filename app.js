@@ -397,13 +397,17 @@ app.get('/listExpertNotifications', function(req, res){
 app.post('/postComment', function(req, res){
   var userPost = req.body;
   console.log(userPost);
-  console.log(userPost['post'].post);
+  console.log(userPost['post']);
 
-  _.each(userPost['userPost'], function(expertName){
+  //  _.each(userPost['post'], function(){
       var note = new LearningGroup({
-      userName: userName,
-      post: userPost['post'].post,
-      personWhoPosted: req.session.user_id});
+      post: userPost['post'],
+      userName: req.session.user_id,
+      learningGroup:'', // extract from html
+      verifiedBy: '', // ""
+      isVerified: false, // false;'
+  });
+      console.log(note);
       note.save(function(err){
         if(err) {
           console.log("Error saving user post");
@@ -412,7 +416,7 @@ app.post('/postComment', function(req, res){
           console.log("Saved");
         }
       });
-  });
+  // });
 });
 
 app.post('/updateQuestionStatus', function(req, res){

@@ -1,19 +1,24 @@
 var app = angular.module('groups',[]);
 app.controller('LearningGroupController', ['$scope', '$http',  function($scope, $http) {
-    $http.get('/getPosts').success(function(data){
-      $('div.postData').attr("disabled", true);
-      console.log("Post data is " + data);
-      $scope.posts = data;
+  $scope.userPost="";
+    $http.get('/learningGroups').success(function(data){
+      // $scope.postText = data;
+      // $scope.userPost = data;
+      console.log("post data=" + $scope.userPost);
     });
 
 $scope.postComment = function(){
-  console.log("Post data " + $scope.postText);
+  // $scope.userPost = post;
+  // console.log("Post data " + $scope.postText);
+  console.log("Post data " + $scope.userPost);
   // var userPost = {
   //   'post' : $scope.postText;
   // };
 
-  console.log("Post Req Data " + "text");
-  $http.post('/postComment', "text").success(function(data){
+  // console.log("Post Req Data " +   $scope.postText);
+  $http.post('/postComment', {'post':$scope.userPost}).success(function(data){
+    $scope.userPost = data;
+    console.log(user)
       console.log("Successfully posted");
   });
 }
