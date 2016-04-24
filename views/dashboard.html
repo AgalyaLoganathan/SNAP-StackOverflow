@@ -172,10 +172,10 @@
 
                     </div>
                     <div class="col-sm-4 pull-right">
-                      <button type="button" class="btn btn-success btn-xs" ng-click="updateLearningObjective(question.id)" data-toggle="tooltip" data-placement="bottom" title="Learn">
+                      <button type="button" class="btn btn-success btn-xs" href="{{question.link}}" ng-click="updateLearningObjective(question.id)" data-toggle="tooltip" data-placement="bottom" title="Learn">
                         <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
                       </button>
-                      <a type="button" class="btn btn-danger btn-xs" href="{{question.link}}" ng-click="updateQuestionStatus(question.id)" data-toggle="tooltip" data-placement="bottom" title="Close">
+                      <a type="button" class="btn btn-danger btn-xs" ng-click="updateQuestionStatus(question.id)" data-toggle="tooltip" data-placement="bottom" title="Close">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                       </a>
                     </div>
