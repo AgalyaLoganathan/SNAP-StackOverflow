@@ -332,12 +332,13 @@ app.get('/getPosts', function(req, res){
 
 
 app.get('/did-you-know', function(req, res){
-   var relatedTags = [];
+/*   var relatedTags = [];
    context.tags.related(filter_for_tags, function(err, results){
    if (err) {
              var data = [];
              context.tags.faq(filter, function(err, results){
              if (err) {
+                console.log("1");
                  res.json(data);
              } else {
              for(i = 0; i < 11; i++) {
@@ -349,15 +350,52 @@ app.get('/did-you-know', function(req, res){
                  data.push(d);
                  }
              }
+             console.log("2");
+             console.log(data);
          }
          }, relatedTags);
 } else {
-   for(i = 0;i<4;i++){
+   for(i = 0;i<1;i++){
      // Fetch 3 related tags; more than this wouldn't give proper results since tags are diverse
      relatedTags.push(results.items[i].name);
    }
+   console.log("3");
+   console.log(relatedTags);
  }
-}, ['andriod']);
+}, ['andriod']);*/
+    var relatedTags = ['mongo'];
+              var username = req.session.user_id;
+              User.findOne({"userName":username}, function(err, user){
+              var data = [];
+              context.tags.faq(filter_for_answering, function(err, results){
+              if (err) {
+                  res.json(data);
+               } else {
+                var i=0;
+                var pc=0;
+                while(true){
+                  for(k=0;k<user['questionIdsToAvoid'].length;k++)
+                  {
+                    if(i==user['questionIdsToAvoid'][k])
+                      break;
+                  }
+                    if(k== user['questionIdsToAvoid'].length)
+                    {
+                      if(results.items[i].answer_count <= 1) {
+                      var d = {'id': i,
+                          'link': results.items[i].link,
+                          'question': results.items[i].title,
+                          'tags': results.items[i].tags};
+                      data.push(d);
+                      pc++;
+                      if(pc==51)
+                      break;
+                      }
+                    }
+                 i++;
+                }
+              }          }, relatedTags);
+        });
 });
 
 app.post('/notifyExperts', function(req, res){
@@ -390,7 +428,7 @@ app.get('/listExpertNotifications', function(req, res){
         res.render('login.ejs');
       } else {
         res.json(notifications);
-      }
+     1111 }
     })
 });
 
