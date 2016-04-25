@@ -297,7 +297,7 @@ app.get('/getExperts', function(req, res){
             {'userId': 3,
             'userName': 'Termininja'},
             {'userId': 4,
-            'userName': 'Rob'}];
+            'userName': 'alogana1@asu.edu'}];
   res.json(results);
   // var tags = req.body;
   // var competencyDetails = Competency.find(

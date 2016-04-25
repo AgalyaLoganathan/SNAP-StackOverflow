@@ -25,17 +25,32 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
    };
 
   var questionForExpert;
+  $scope.expertsList = [];
+  $scope.selectedExperts = {};
   $scope.listExperts = function(question){
     $http.get('/getExperts', question.tags).success(function(data){
           $scope.expertsList = data;
           questionForExpert = question;
+           for(i = 0; i < $scope.expertsList.length; i++) {
+                $scope.selectedExperts[$scope.expertsList[i].userName] = false;
+           }
           console.log("Question for expert " + questionForExpert.question);
     });
     $('div.experts-list').show();
   };
 
   $scope.notifyExperts = function(){
-    var experts = ['user1', 'user2', 'user4', 'alogana1@asu.edu'];
+    var experts = [];
+    console.log($scope.selectedExperts);
+    for(i = 0; i < $scope.expertsList.length; i++) {
+      if($scope.selectedExperts[$scope.expertsList[i].userName] == true) {
+        experts.push($scope.expertsList[i].userName);
+      }
+    }
+  $scope.expertsList = [];
+  $scope.selectedExperts = {};
+    console.log("Experts looked for " + experts);
+    // var experts = ['user1', 'user2', 'user4', 'alogana1@asu.edu'];
     var requestData = {
       'experts' : experts,
       'question' : questionForExpert
