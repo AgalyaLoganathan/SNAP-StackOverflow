@@ -397,13 +397,13 @@ app.get('/listExpertNotifications', function(req, res){
 app.post('/postComment', function(req, res){
   var userPost = req.body;
   console.log(userPost);
-  console.log(userPost['post']);
+  console.log(userPost['post'] + userPost['learningGroup']);
 
   //  _.each(userPost['post'], function(){
       var note = new LearningGroup({
       post: userPost['post'],
       userName: req.session.user_id,
-      learningGroup:'', // extract from html
+      learningGroup:userPost['learningGroup'], // extract from html
       verifiedBy: '', // ""
       isVerified: false, // false;'
   });

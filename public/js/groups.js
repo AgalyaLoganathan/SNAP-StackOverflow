@@ -1,6 +1,7 @@
 var app = angular.module('groups',[]);
 app.controller('LearningGroupController', ['$scope', '$http',  function($scope, $http) {
   $scope.userPost="";
+  $scope.learningGroup="";
     $http.get('/learningGroups').success(function(data){
       // $scope.postText = data;
       // $scope.userPost = data;
@@ -16,7 +17,9 @@ $scope.postComment = function(){
   // };
 
   // console.log("Post Req Data " +   $scope.postText);
-  $http.post('/postComment', {'post':$scope.userPost}).success(function(data){
+  console.log(document.getElementById("learningGroupName").innerHTML.split(" ",1));
+  $scope.learningGroup = document.getElementById("learningGroupName").innerHTML.split(" ",1);
+  $http.post('/postComment', {'post':$scope.userPost,'learningGroup':$scope.learningGroup}).success(function(data){
     $scope.userPost = data;
     console.log(user)
       console.log("Successfully posted");
