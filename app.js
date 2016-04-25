@@ -422,8 +422,9 @@ app.post('/postComment', function(req, res){
 app.post('/updateQuestionStatus', function(req, res){
     var question_id = req.body;
     var id = parseInt(question_id['question_id']);
-
-    User.findOne({'userId' : 1}, function(err, user){
+    
+    var username = req.session.user_id;
+    User.findOne({"userName":username}, function(err, user){
               user['questionIdsToAvoid'].push(id);
               user.save(function(err, user) {
               if (err) return console.error(err);
@@ -433,22 +434,38 @@ app.post('/updateQuestionStatus', function(req, res){
 
 app.get('/what-to-answer', function(req, res){
     var relatedTags = ['chef'];
+              var username = req.session.user_id;
+              User.findOne({"userName":username}, function(err, user){
               var data = [];
               context.tags.faq(filter_for_answering, function(err, results){
               if (err) {
                   res.json(data);
-              } else {
-                  for(i = 0; i < 51; i++) {
-                  if(results.items[i].answer_count <= 1) {
-                  var d = {'id': i,
+               } else {
+                var i=0;
+                var pc=0;
+                while(true){
+                  for(k=0;k<user['questionIdsToAvoid'].length;k++)
+                  {
+                    if(i==user['questionIdsToAvoid'][k])
+                      break;
+                  }
+                    if(k== user['questionIdsToAvoid'].length)
+                    {
+                      if(results.items[i].answer_count <= 1) {
+                      var d = {'id': i,
                           'link': results.items[i].link,
                           'question': results.items[i].title,
                           'tags': results.items[i].tags};
-                  data.push(d);
-                  }
-              }
-          }
-          }, relatedTags);
+                      data.push(d);
+                      pc++;
+                      if(pc==51)
+                      break;
+                      }
+                    }
+                 i++;
+                }
+              }          }, relatedTags);
+        });
 });
 
 
@@ -488,17 +505,32 @@ app.get('/what-to-learn', function(req, res){
           context.tags.faq(filter, function(err, results){
             if (err) {
                 res.json(data);
-            } else {
-            for(i = 0; i < 11; i++) {
-                if(results.items[i].is_answered == true) {
-                var d = {'id': i,
-                        'link': results.items[i].link,
-                        'question': results.items[i].title,
-                        'tags': results.items[i].tags};
-                data.push(d);
+              } else {
+                i=0;
+                var pc=0;
+                while(true){
+                  for(k=0;k<user['questionIdsToAvoid'].length;k++)
+                  {
+                    if(i==user['questionIdsToAvoid'][k])
+                      break;
                   }
+                    if(k== user['questionIdsToAvoid'].length)
+                    {
+                      if(results.items[i].is_answered == true) {
+                      var d = {'id': i,
+                          'link': results.items[i].link,
+                          'question': results.items[i].title,
+                          'tags': results.items[i].tags};
+                      data.push(d);
+                      pc++;
+                      if(pc==11)
+                      break;
+                      }
+                    }
+                 i++;
+                }
               }
-            }
+
           }, obj.slice(0,1));
       });
     });
