@@ -342,7 +342,6 @@ app.get('/did-you-know', function(req, res){
         res.json(data);
       }
       var competencyId = user.competencies[0].competencyId;
-      console.log(competencyId);
       Competency.findOne({"competencyId": competencyId}, function(err, competency){
 
           if(err) {
@@ -732,8 +731,20 @@ app.post('/removeCompetency', function(req, res){
           res.redirect('/dashboard');
         }
         id = competency.competencyId;
-        User.update({'userName' : username}, {$pull: {'competencies':{'competencyId':id}}});
-        res.redirect('/dashboard');
+
+        User.findOne({'userName' : username}, function(err,user) {
+            for(var i=0; i<user.competencies.length; i++) {
+              if(user.competencies[i].competencyId == id) {
+                var compId = user.competencies[i]._id;
+              }
+            }
+            var doc = user.competencies.id(compId).remove();
+            user.save(function (err) {
+              if (err) return handleError(err);
+              
+              res.redirect('/dashboard');
+            });
+        });
       });
 
     }
