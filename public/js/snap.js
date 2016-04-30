@@ -43,8 +43,8 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
     var experts = [];
     console.log($scope.selectedExperts);
     for(i = 0; i < $scope.expertsList.length; i++) {
-      if($scope.selectedExperts[$scope.expertsList[i].userName] == true) {
-        experts.push($scope.expertsList[i].userName);
+      if($scope.selectedExperts[$scope.expertsList[i]] == true) {
+        experts.push($scope.expertsList[i]);
       }
     }
   $scope.expertsList = [];
