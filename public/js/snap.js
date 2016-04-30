@@ -19,6 +19,7 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
 
   $scope.updateQuestionStatus=function(question_id){
     $http.post('/updateQuestionStatus',{question_id}).success(function(data){
+      window.location.reload();
     console.log("I guess I'm done");
     });
    };
@@ -101,6 +102,7 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
   };
   $scope.updateQuestionStatus=function(question_id){
     $http.post('/updateQuestionStatus',{question_id}).success(function(data){
+    window.location.reload();
     console.log("I guess I'm done");
   });
    };
@@ -171,6 +173,7 @@ $scope.updateLearningObjective = function(question_id) {
   };
   $scope.updateQuestionStatus=function(question_id){
     $http.post('/updateQuestionStatus',{question_id}).success(function(data){
+      window.location.reload();
     console.log("I guess I'm done");
   });
    };
