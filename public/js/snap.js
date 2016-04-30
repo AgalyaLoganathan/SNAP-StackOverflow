@@ -126,7 +126,7 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
       console.log(index);
       $scope.competency_list.splice(index, 1);
       $http.post('/removeCompetency', {competency}).success(function(data){
-          console.log("I guess I'm done");
+          window.location.reload();
         });      
   };
 }])
@@ -164,7 +164,7 @@ $scope.updateLearningObjective = function(question_id) {
       if($scope.did_you_know_questions[i].id == question_id) {
         var tags = $scope.did_you_know_questions[i].tags;
         $http.post('/updateCompetency', tags).success(function(data){
-          window.location.reload();
+          
         });
         break;
       }
