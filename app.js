@@ -238,7 +238,8 @@ app.post('/signup', function(req, res){
 })
 
 app.post('/updateCompetency', function(req, res){
-  var tags = req.body;
+  var tags = req.body['tags'];
+  var addScore = req.body['score'];
   var username = req.session.user_id;
   User.findOne({'userName': username}, function(err, user){
       Competency.find({"competencyName": {$in:tags}}, function(err, competency){
@@ -261,10 +262,10 @@ app.post('/updateCompetency', function(req, res){
             user.competencies.push({"competencyId":id, "score":1});
           } else {
             var score = user.competencies[j].score;
-            if(score == 100) {
-              // do nothing
+            if(score+addScore >= 100) {
+              user.competencies[j].score = 100;
             } else {
-              user.competencies[j].score = score+1;
+              user.competencies[j].score = score+addScore;
             }
           }
           user.save(function(err, user) {
