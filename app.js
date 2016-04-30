@@ -323,10 +323,84 @@ app.get('/getExperts', function(req, res){
   // });
 });
 
+var post1= 'A constructor is used in the creation of an object that is an instance of a class. Typically it performs operations required to initialize the class before methods are invoked or fields are accessed. Constructors are never inherited. Similar to methods, reflection provides APIs to discover and retrieve the constructors of a class and obtain declaration information such as the modifiers, parameters, annotations, and thrown exceptions. New instances of classes may also be created using a specified constructor. The key classes used when working with constructors are Class and java.lang.reflect.Constructor. Common operations involving constructors are covered in the following sections: Finding Constructors illustrates how to retrieve constructors with specific parameters Retrieving and Parsing Constructor Modifiers shows how to obtain the modifiers of a constructor declaration and other information about the constructor Creating New Class Instances shows how to instantiate an instance of an object by invoking its constructor Troubleshooting describes common errors which may be encountered while finding or invoking constructors';
+var post2 = 'Can you explain it better?';
+var post3 = 'Generics were introduced to the Java language to provide tighter type checks at compile time and to support generic programming. To implement generics, the Java compiler applies type erasure to: Replace all type parameters in generic types with their bounds or Object if the type parameters are unbounded. The produced bytecode, therefore, contains only ordinary classes, interfaces, and methods. Insert type casts if necessary to preserve type safety. Generate bridge methods to preserve polymorphism in extended generic types. Type erasure ensures that no new classes are created for parameterized types; consequently, generics incur no runtime overhead.';
+var post4 = 'A class may be declared with one or more modifiers which affect its runtime behavior: Access modifiers: public, protected, and private Modifier requiring override: abstract Modifier restricting to one instance: static Modifier prohibiting value modification: final Modifier forcing strict floating point behavior: strictfp Annotations Not all modifiers are allowed on all classes, for example an interface cannot be final and an enum cannot be abstract. java.lang.reflect.Modifier contains declarations for all possible modifiers. It also contains methods which may be used to decode the set of modifiers returned by Class.getModifiers(). The ClassDeclarationSpy example shows how to obtain the declaration components of a class including the modifiers, generic type parameters, implemented interfaces, and the inheritance path.';
+app.get('/populatePosts', function(req, res){
+  var l1 = new LearningGroup({
+      post: post1,
+      userName: 'tinylx',
+      learningGroup: 'Java', // extract from html
+      verifiedBy: '', // ""
+      isVerified: true, // false;'
+  });
+
+  var l2 = new LearningGroup({
+      post: post2,
+      userName: 'test',
+      learningGroup: 'Java', // extract from html
+      verifiedBy: '', // ""
+      isVerified: false, // false;'
+  });
+
+  var l3 = new LearningGroup({
+      post: post3,
+      userName: 'tinylx',
+      learningGroup: 'Java', // extract from html
+      verifiedBy: '', // ""
+      isVerified: false, // false;'
+  });
+
+ var l4 = new LearningGroup({
+      post: post4,
+      userName: 'tinylx',
+      learningGroup: 'Java', // extract from html
+      verifiedBy: '', // ""
+      isVerified: true, // false;'
+  });
+
+  l1.save(function(err){
+        if(err) {
+          console.log("Error saving notifications");
+          res.sendStatus(500);
+        } else {
+          console.log("Saved");
+        }
+      });
+
+   l2.save(function(err){
+        if(err) {
+          console.log("Error saving notifications");
+          res.sendStatus(500);
+        } else {
+          console.log("Saved");
+        }
+      });
+    l3.save(function(err){
+        if(err) {
+          console.log("Error saving notifications");
+          res.sendStatus(500);
+        } else {
+          console.log("Saved");
+        }
+      });
+     l4.save(function(err){
+        if(err) {
+          console.log("Error saving notifications");
+          res.sendStatus(500);
+        } else {
+          console.log("Saved");
+        }
+      });
+
+});
+
 app.get('/getPosts', function(req, res){
   //var learningGroup = req.body;
   var learningGroup = 'Java';
   LearningGroup.find({learningGroup: learningGroup}, function(err,learningGroupDetails){
+  console.log("learningGroupDetails" + learningGroupDetails.length);
    res.json(learningGroupDetails);
   });
 });
@@ -423,6 +497,24 @@ app.get('/listExpertNotifications', function(req, res){
     })
 });
 
+app.post('/updatePostVerification', function(req, res){
+  console.log("Entered")
+  var postText = req.body.post.post;
+  console.log("Post Input");
+  console.log(postText);
+  LearningGroup.update(
+  {'post': postText,
+    'userName': req.body.post.userName},
+  {
+    $set: { 'isVerified' : true,
+            'verifiedBy':  req.session.user_id }
+  }, function(err, results){
+    console.log(results);
+    res.sendStatus(200);
+  }
+  );
+});
+
 app.post('/postComment', function(req, res){
   var userPost = req.body;
   console.log(userPost);
@@ -443,6 +535,7 @@ app.post('/postComment', function(req, res){
           res.sendStatus(500);
         } else {
           console.log("Saved");
+          res.sendStatus(200);
         }
       });
   // });
@@ -451,7 +544,7 @@ app.post('/postComment', function(req, res){
 app.post('/updateQuestionStatus', function(req, res){
     var question_id = req.body;
     var id = parseInt(question_id['question_id']);
-    
+
     var username = req.session.user_id;
     User.findOne({"userName":username}, function(err, user){
               user['questionIdsToAvoid'].push(id);

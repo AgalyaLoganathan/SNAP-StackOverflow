@@ -1,5 +1,6 @@
 var app = angular.module('groups',[]);
 app.controller('LearningGroupController', ['$scope', '$http',  function($scope, $http) {
+  $scope.posts = [];
   $scope.userPost="";
   $scope.learningGroup="";
     $http.get('/getPosts').success(function(data){
@@ -18,12 +19,26 @@ $scope.postComment = function(){
   // };
 
   // console.log("Post Req Data " +   $scope.postText);
-  console.log(document.getElementById("learningGroupName").innerHTML.split(" ",1));
   $scope.learningGroup = document.getElementById("learningGroupName").innerHTML.split(" ",1);
   $http.post('/postComment', {'post':$scope.userPost,'learningGroup':$scope.learningGroup}).success(function(data){
     $scope.userPost = data;
-    console.log(user)
-      console.log("Successfully posted");
+    $scope.posts.push(data);
+    window.location.reload();
   });
+}
+
+$scope.updateVerificationStatus = function(post){
+  console.log("Verified");
+  console.log(post);
+  $http.post('/updatePostVerification', {post}).success(function(){
+    console.log("Sucessfully saved");
+    window.location.reload();
+  })
+}
+
+$scope.isVerified = function(post){
+  console.log("In isVerified");
+  console.log(post);
+  return post['isVerified'] == true;
 }
 }]);
