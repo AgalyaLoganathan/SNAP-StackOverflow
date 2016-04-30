@@ -163,7 +163,7 @@ $scope.updateLearningObjective = function(question_id) {
     for (var i = 0; i < $scope.did_you_know_questions.length; i++) {
       if($scope.did_you_know_questions[i].id == question_id) {
         var tags = $scope.did_you_know_questions[i].tags;
-        $http.post('/updateCompetency', tags).success(function(data){
+        $http.post('/updateCompetency', {"score":1,"tags":tags}).success(function(data){
           
         });
         break;

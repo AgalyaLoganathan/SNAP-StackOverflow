@@ -350,7 +350,9 @@ app.get('/did-you-know', function(req, res){
           }
           tags.push(competency.competencyName);
           context.tags.related(filter_for_tags, function(err, results){
-
+              var rel_tags=[];
+              rel_tags.push(results.items[0].name);
+              console.log(rel_tags);
               context.tags.faq(filter_for_answering, function(err, results){
               if (err) {
                   res.json(data);
@@ -372,14 +374,14 @@ app.get('/did-you-know', function(req, res){
                           'tags': results.items[i].tags};
                       data.push(d);
                       pc++;
-                      if(pc==51)
-                      break;
+                      if(data.length==5)
+                        break;
                       }
                     }
                  i++;
                 }
-              }          
-            }, tags);
+              }
+            }, rel_tags);
             
           }, tags);
       });
