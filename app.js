@@ -311,7 +311,8 @@ Competency.find(
                      _.each(userCompetencies, function(userCompetency){
                         console.log(userCompetency);
                         if(_.contains(competencyIds, userCompetency['competencyId'])){
-                         if(userCompetency['score'] > 50) {
+                         if(userCompetency['score'] > 75
+                          && userDetail['userName'] != req.session.userName) {
                              experts.push(userDetail['userName']);
                          }
                         }
@@ -417,6 +418,7 @@ app.get('/did-you-know', function(req, res){
       if(err || user == undefined) {
         res.json(data);
       }
+      if(user.competencies.length > 0){
       var competencyId = user.competencies[0].competencyId;
       Competency.findOne({"competencyId": competencyId}, function(err, competency){
 
@@ -459,8 +461,8 @@ app.get('/did-you-know', function(req, res){
             }, rel_tags);
           }, tags);
       });
+    }
     });
-
   }
 
 });
