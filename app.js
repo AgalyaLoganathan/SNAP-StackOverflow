@@ -332,41 +332,25 @@ app.get('/getPosts', function(req, res){
 
 
 app.get('/did-you-know', function(req, res){
-/*   var relatedTags = [];
-   context.tags.related(filter_for_tags, function(err, results){
-   if (err) {
-             var data = [];
-             context.tags.faq(filter, function(err, results){
-             if (err) {
-                console.log("1");
-                 res.json(data);
-             } else {
-             for(i = 0; i < 11; i++) {
-                 if(results.items[i].is_answered == true) {
-                 var d = {'id': i,
-                         'link': results.items[i].link,
-                         'question': results.items[i].title,
-                         'tags': results.items[i].tags};
-                 data.push(d);
-                 }
-             }
-             console.log("2");
-             console.log(data);
-         }
-         }, relatedTags);
-} else {
-   for(i = 0;i<1;i++){
-     // Fetch 3 related tags; more than this wouldn't give proper results since tags are diverse
-     relatedTags.push(results.items[i].name);
-   }
-   console.log("3");
-   console.log(relatedTags);
- }
-}, ['andriod']);*/
-    var relatedTags = ['mongo'];
-              var username = req.session.user_id;
-              User.findOne({"userName":username}, function(err, user){
-              var data = [];
+  var tags = [];
+  if(req.session.user_id) {
+    var username = req.session.user_id;
+
+    User.findOne({"userName":username}, function(err, user){
+      var data = [];
+      if(err || user == undefined) {
+        res.json(data);
+      }
+      var competencyId = user.competencies[0].competencyId;
+      console.log(competencyId);
+      Competency.findOne({"competencyId": competencyId}, function(err, competency){
+
+          if(err) {
+            res.sendFile(__dirname + '/views/dashboard.html');
+          }
+          tags.push(competency.competencyName);
+          context.tags.related(filter_for_tags, function(err, results){
+
               context.tags.faq(filter_for_answering, function(err, results){
               if (err) {
                   res.json(data);
@@ -394,8 +378,15 @@ app.get('/did-you-know', function(req, res){
                     }
                  i++;
                 }
-              }          }, relatedTags);
-        });
+              }          
+            }, tags);
+            
+          }, tags);
+      });
+    });
+
+  }
+
 });
 
 app.post('/notifyExperts', function(req, res){
