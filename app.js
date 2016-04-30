@@ -471,15 +471,42 @@ app.post('/updateQuestionStatus', function(req, res){
 });
 
 app.get('/what-to-answer', function(req, res){
-    var relatedTags = ['chef'];
-              var username = req.session.user_id;
-              User.findOne({"userName":username}, function(err, user){
-              var data = [];
-              context.tags.faq(filter_for_answering, function(err, results){
-              if (err) {
-                  res.json(data);
-               } else {
-                var i=0;
+if(req.session.user_id) {
+    var username = req.session.user_id;
+
+    User.findOne({"userName":username}, function(err, user){
+      var obj = [];
+      if(err || user == undefined) {
+        res.render('login.ejs', {message:'Please login first'});
+      }
+      var competencies = user.competencies;
+      var query = [];
+      for(var i=0;i<competencies.length;i++) {
+        query.push(competencies[i].competencyId);
+      }
+      Competency.find({"competencyId": {$in:query}}, function(err, competency){
+
+          if(err) {
+            res.sendFile(__dirname + '/views/dashboard.html');
+          }
+          for(var i=0; i<competency.length; i++) {
+            var competencyName = competency[i].competencyName;
+            var s = 0;
+            for(var j=0; j<competencies.length; j++) {
+              if(competencies[j].competencyId == competency[i].competencyId) {
+                s = competencies[j].score;
+                break;
+              }
+            }
+            if(s >= 75)
+              obj.push(competencyName);
+          }
+          var data = [];
+          context.tags.faq(filter, function(err, results){
+            if (err) {
+                res.json(data);
+              } else {
+                i=0;
                 var pc=0;
                 while(true){
                   for(k=0;k<user['questionIdsToAvoid'].length;k++)
@@ -489,21 +516,26 @@ app.get('/what-to-answer', function(req, res){
                   }
                     if(k== user['questionIdsToAvoid'].length)
                     {
-                      if(results.items[i].answer_count <= 1) {
+                      if(results.items[i].is_answered == true) {
                       var d = {'id': i,
                           'link': results.items[i].link,
                           'question': results.items[i].title,
                           'tags': results.items[i].tags};
                       data.push(d);
                       pc++;
-                      if(pc==51)
+                      if(pc==11)
                       break;
                       }
                     }
                  i++;
                 }
-              }          }, relatedTags);
-        });
+              }
+
+          }, obj.slice(0,1));
+      });
+    });
+
+  }
 });
 
 
@@ -815,4 +847,80 @@ app.get('/get-learning-objectives', function(req, res){
 
 http.createServer(app).listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
+});
+
+
+
+
+var post1= 'A constructor is used in the creation of an object that is an instance of a class. Typically it performs operations required to initialize the class before methods are invoked or fields are accessed. Constructors are never inherited. Similar to methods, reflection provides APIs to discover and retrieve the constructors of a class and obtain declaration information such as the modifiers, parameters, annotations, and thrown exceptions. New instances of classes may also be created using a specified constructor. The key classes used when working with constructors are Class and java.lang.reflect.Constructor. Common operations involving constructors are covered in the following sections: Finding Constructors illustrates how to retrieve constructors with specific parameters Retrieving and Parsing Constructor Modifiers shows how to obtain the modifiers of a constructor declaration and other information about the constructor Creating New Class Instances shows how to instantiate an instance of an object by invoking its constructor Troubleshooting describes common errors which may be encountered while finding or invoking constructors';
+var post2 = 'Can you explain it better?';
+var post3 = 'Generics were introduced to the Java language to provide tighter type checks at compile time and to support generic programming. To implement generics, the Java compiler applies type erasure to: Replace all type parameters in generic types with their bounds or Object if the type parameters are unbounded. The produced bytecode, therefore, contains only ordinary classes, interfaces, and methods. Insert type casts if necessary to preserve type safety. Generate bridge methods to preserve polymorphism in extended generic types. Type erasure ensures that no new classes are created for parameterized types; consequently, generics incur no runtime overhead.';
+var post4 = 'A class may be declared with one or more modifiers which affect its runtime behavior: Access modifiers: public, protected, and private Modifier requiring override: abstract Modifier restricting to one instance: static Modifier prohibiting value modification: final Modifier forcing strict floating point behavior: strictfp Annotations Not all modifiers are allowed on all classes, for example an interface cannot be final and an enum cannot be abstract. java.lang.reflect.Modifier contains declarations for all possible modifiers. It also contains methods which may be used to decode the set of modifiers returned by Class.getModifiers(). The ClassDeclarationSpy example shows how to obtain the declaration components of a class including the modifiers, generic type parameters, implemented interfaces, and the inheritance path.';
+app.get('/populatePosts', function(req, res){
+  var l1 = new LearningGroup({
+      post: post1,
+      userName: 'tinylx',
+      learningGroup: 'Java', // extract from html
+      verifiedBy: '', // ""
+      isVerified: true, // false;'
+  });
+
+  var l2 = new LearningGroup({
+      post: post2,
+      userName: 'test',
+      learningGroup: 'Java', // extract from html
+      verifiedBy: '', // ""
+      isVerified: false, // false;'
+  });
+
+  var l3 = new LearningGroup({
+      post: post3,
+      userName: 'tinylx',
+      learningGroup: 'Java', // extract from html
+      verifiedBy: '', // ""
+      isVerified: false, // false;'
+  });
+
+ var l4 = new LearningGroup({
+      post: post4,
+      userName: 'tinylx',
+      learningGroup: 'Java', // extract from html
+      verifiedBy: '', // ""
+      isVerified: true, // false;'
+  });
+
+  l1.save(function(err){
+        if(err) {
+          console.log("Error saving notifications");
+          res.sendStatus(500);
+        } else {
+          console.log("Saved");
+        }
+      });
+
+   l2.save(function(err){
+        if(err) {
+          console.log("Error saving notifications");
+          res.sendStatus(500);
+        } else {
+          console.log("Saved");
+        }
+      });
+    l3.save(function(err){
+        if(err) {
+          console.log("Error saving notifications");
+          res.sendStatus(500);
+        } else {
+          console.log("Saved");
+        }
+      });
+     l4.save(function(err){
+        if(err) {
+          console.log("Error saving notifications");
+          res.sendStatus(500);
+        } else {
+          console.log("Saved");
+        }
+      });
+
 });

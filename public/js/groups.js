@@ -2,9 +2,10 @@ var app = angular.module('groups',[]);
 app.controller('LearningGroupController', ['$scope', '$http',  function($scope, $http) {
   $scope.userPost="";
   $scope.learningGroup="";
-    $http.get('/learningGroups').success(function(data){
+    $http.get('/getPosts').success(function(data){
       // $scope.postText = data;
       // $scope.userPost = data;
+      $scope.posts = data;
       console.log("post data=" + $scope.userPost);
     });
 

@@ -1,7 +1,6 @@
 var app = angular.module('snap',[]);
 
 app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $http) {
-    console.log("Im working");
     $http.get('/what-to-answer').success(function(data){
         $scope.questions_to_answer = data;
     });
@@ -155,4 +154,23 @@ app.controller('DidYouKnowController', ['$scope', '$http',  function($scope, $ht
   $scope.hoverOut = function(){
       this.hoverEdit = false;
   };
+
+$scope.updateLearningObjective = function(question_id) {
+    for (var i = 0; i < $scope.did_you_know_questions.length; i++) {
+      if($scope.did_you_know_questions[i].id == question_id) {
+        var tags = $scope.did_you_know_questions[i].tags;
+        $http.post('/updateCompetency', tags).success(function(data){
+          console.log("I guess I'm done");
+        });
+        break;
+      }
+    }
+  };
+  $scope.updateQuestionStatus=function(question_id){
+    $http.post('/updateQuestionStatus',{question_id}).success(function(data){
+    console.log("I guess I'm done");
+  });
+   };
+
+  
 }])

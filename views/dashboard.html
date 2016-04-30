@@ -125,9 +125,7 @@
               <div class="panel panel-default" ng-repeat="question in questions_to_answer">
                 <div class="panel-body">
                   <div class="row">
-
                     <div class="col-sm-7">
-
                     </div>
                     <div class="col-sm-5 pull-right">
                       <button type="button" class="btn btn-primary btn-xs" ng-click="listExperts(question)" data-toggle="tooltip" data-placement="bottom" title="Ask an Expert">
@@ -172,9 +170,9 @@
 
                     </div>
                     <div class="col-sm-4 pull-right">
-                      <button type="button" class="btn btn-success btn-xs" href="{{question.link}}" ng-click="updateLearningObjective(question.id)" data-toggle="tooltip" data-placement="bottom" title="Learn">
+                      <a type="button" class="btn btn-success btn-xs" href="{{question.link}}" ng-click="updateLearningObjective(question.id)" data-toggle="tooltip" data-placement="bottom" title="Learn">
                         <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
-                      </button>
+                      </a>
                       <a type="button" class="btn btn-danger btn-xs" ng-click="updateQuestionStatus(question.id)" data-toggle="tooltip" data-placement="bottom" title="Close">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                       </a>
@@ -204,14 +202,19 @@
            <div class="panel panel-default" ng-repeat="question in did_you_know_questions">
              <div class="panel-body">
                <div class="row">
+                    <div class="col-sm-8">
 
-                    <div class="col-sm-12 pull-right">
-                      <button type="button" class="btn btn-danger pull-right btn-xs" ng-click="updateQuestionStatus(question.id)">
+                    </div>
+                    <div class="col-sm-4 pull-right">
+                      <a type="button" class="btn btn-success btn-xs" href="{{question.link}}" ng-click="updateQuestionStatus(question.id)" data-toggle="tooltip" data-placement="bottom" title="Learn">
+                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                      </a>
+                      <a type="button" class="btn btn-danger btn-xs" ng-click="updateLearningObjective(question.id)" data-toggle="tooltip" data-placement="bottom" title="Close">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                      </button>
+                      </a>
                     </div>
 
-               </div>
+                </div>
                <div class="row" style="padding:10px;">
                  <div class="col-sm-8" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()">
                    {{question.question}}
@@ -221,9 +224,6 @@
                           {{tag}}
                         </span>
                       </span>
-                 </div>
-                 <div class="text-right col-sm-4">
-                   <a target="_blank" class="btn btn-primary" href="{{question.link}}" ng-click="updateLearningObjective(question.id)">Learn</a>
                  </div>
                </div>
              </div>
