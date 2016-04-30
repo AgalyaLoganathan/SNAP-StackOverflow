@@ -290,37 +290,38 @@ app.post('/updateCompetency', function(req, res){
     });
 }); */
 
-app.get('/getExperts', function(req, res){
-  var results = [{'userId': 1,
-            'userName': 'web-dev'},
-              {'userId': 2,
-            'userName': 'tinylx'},
-            {'userId': 3,
-            'userName': 'Termininja'},
-            {'userId': 4,
-            'userName': 'alogana1@asu.edu'}];
-  res.json(results);
-  // var tags = req.body;
-  // var competencyDetails = Competency.find(
-  //             {'competencyName' : { $in: [tags] } }
-  //             );
-  // console.log("competency " +competencyDetails);
-  // var competencyIds = _.each(competencyDetails, function(competency){
-  //     return competency['competencyId']
-  // });
+app.post('/getExperts', function(req, res){
+console.log(req.body);
+var tags = ['java']
+var competencyIds = [];
+Competency.find(
+              {'competencyName' : { $in: tags} } ,
+              function(err, competencyDetails) {
+                _.each(competencyDetails, function(competency){
+                    competencyIds.push(competency['competencyId']);
+                });
+                User.find({},function(err, userDetails){
+                   var experts= [];
+                   console.log("competency " + competencyIds);
+                   _.each(userDetails, function(userDetail){
+                    console.log(userDetail['userName']);
+                     var userCompetencies = userDetail['competencies'];
+                     console.log("Competency Ids " + competencyIds);
 
-  // User.find(function(err, userDetails){
-  //   var experts= [];
-  //   _.each(userDetails, function(userDetail){
-  //     var userCompetencies = userDetail['competencies'];
-  //     if(_.contains(competencyIds, userCompetencies['competencyId'])){
-  //         if(userCompetencies['score'] > 50) {
-  //             experts.add(userDetail);
-  //         }
-  //     }
-  //   });
-  //   return experts;
-  // });
+                     _.each(userCompetencies, function(userCompetency){
+                        console.log(userCompetency);
+                        if(_.contains(competencyIds, userCompetency['competencyId'])){
+                         if(userCompetency['score'] > 50) {
+                             experts.push(userDetail['userName']);
+                         }
+                        }
+                     });
+                   });
+                   res.json(_.unique(experts));
+                 });
+              });
+
+
 });
 
 var post1= 'A constructor is used in the creation of an object that is an instance of a class. Typically it performs operations required to initialize the class before methods are invoked or fields are accessed. Constructors are never inherited. Similar to methods, reflection provides APIs to discover and retrieve the constructors of a class and obtain declaration information such as the modifiers, parameters, annotations, and thrown exceptions. New instances of classes may also be created using a specified constructor. The key classes used when working with constructors are Class and java.lang.reflect.Constructor. Common operations involving constructors are covered in the following sections: Finding Constructors illustrates how to retrieve constructors with specific parameters Retrieving and Parsing Constructor Modifiers shows how to obtain the modifiers of a constructor declaration and other information about the constructor Creating New Class Instances shows how to instantiate an instance of an object by invoking its constructor Troubleshooting describes common errors which may be encountered while finding or invoking constructors';
@@ -456,7 +457,6 @@ app.get('/did-you-know', function(req, res){
                 }
               }
             }, rel_tags);
-            
           }, tags);
       });
     });
@@ -837,7 +837,7 @@ app.post('/removeCompetency', function(req, res){
             var doc = user.competencies.id(compId).remove();
             user.save(function (err) {
               if (err) return handleError(err);
-              
+
               res.redirect('/dashboard');
             });
         });

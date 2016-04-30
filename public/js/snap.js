@@ -27,7 +27,7 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
   $scope.expertsList = [];
   $scope.selectedExperts = {};
   $scope.listExperts = function(question){
-    $http.get('/getExperts', question.tags).success(function(data){
+    $http.post('/getExperts',{ tags : question.tags}).success(function(data){
           $scope.expertsList = data;
           questionForExpert = question;
            for(i = 0; i < $scope.expertsList.length; i++) {
@@ -127,7 +127,7 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
       $scope.competency_list.splice(index, 1);
       $http.post('/removeCompetency', {competency}).success(function(data){
           window.location.reload();
-        });      
+        });
   };
 }])
 .controller('LearningListController', ['$scope', '$http', function($scope, $http) {
@@ -143,7 +143,7 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
       $scope.learning_list.splice(index, 1);
       $http.post('/removeCompetency', {competency}).success(function(data){
           window.location.reload();
-        });      
+        });
   };
 }]);
 app.controller('DidYouKnowController', ['$scope', '$http',  function($scope, $http) {
@@ -163,8 +163,7 @@ $scope.updateLearningObjective = function(question_id) {
     for (var i = 0; i < $scope.did_you_know_questions.length; i++) {
       if($scope.did_you_know_questions[i].id == question_id) {
         var tags = $scope.did_you_know_questions[i].tags;
-        $http.post('/updateCompetency', {"score":1,"tags":tags}).success(function(data){
-          
+        $http.post('/updateCompetency', {"score":1,"tags":tags}).success(function(data){n
         });
         break;
       }

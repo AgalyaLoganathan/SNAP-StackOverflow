@@ -113,8 +113,8 @@
                      <div class="form-group row">
                      <div class="checkbox" class="col-sm-8" ng-repeat="expert in expertsList">
                       <label>
-                        <input type="checkbox" value={{expert.userName}} ng-model=selectedExperts[expert.userName]>
-                        <span>{{expert.userName}}</span>
+                        <input type="checkbox" value={{expert.userName}} ng-model=selectedExperts[expert]>
+                        <span>{{expert}}</span>
                       </label>
                       </div>
                        <a target="_blank" class="btn btn-small ask-to-answer" href="" ng-click="notifyExperts()">Ask</a>
