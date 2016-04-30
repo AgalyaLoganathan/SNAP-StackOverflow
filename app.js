@@ -730,6 +730,25 @@ app.post('/add-competency', function(req, res){
     }
 });
 
+app.post('/removeCompetency', function(req, res){
+    if(req.session.user_id) {
+      var username = req.session.user_id;
+      var toremove = req.body['competency'];
+      var id = 0;
+
+      Competency.findOne({"competencyName": toremove}, function(err, competency){
+        if(err) {
+          res.redirect('/dashboard');
+        }
+        id = competency.competencyId;
+        User.update({'userName' : username}, {$pull: {'competencies':{'competencyId':id}}});
+        res.redirect('/dashboard');
+      });
+
+    }
+});
+
+
 app.post('/lookup-profile', function(req, res){
   var graphMessage = [];
   var username = req.body['lookup-user'];

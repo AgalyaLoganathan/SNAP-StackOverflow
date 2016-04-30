@@ -122,10 +122,12 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
   // $scope.competency_list = competency_list;
   $scope.removeCompetency = function(competency) {
     console.log(competency);
-      var index = competency_list.indexOf(competency);
+      var index = $scope.competency_list.indexOf(competency);
       console.log(index);
       $scope.competency_list.splice(index, 1);
-      console.log(competency_list);
+      $http.post('/removeCompetency', {competency}).success(function(data){
+          console.log("I guess I'm done");
+        });      
   };
 }])
 .controller('LearningListController', ['$scope', '$http', function($scope, $http) {
@@ -134,12 +136,14 @@ app.controller('WhatToAnswerController', ['$scope', '$http',  function($scope, $
     });
   //var learning_list = ['android', 'java', 'mobile app'];
   //$scope.learning_list = learning_list;
-  $scope.removeToLearnElement = function(learning) {
-    console.log(learning);
-      var index = learning_list.indexOf(learning);
+  $scope.removeToLearnElement = function(competency) {
+    console.log(competency);
+      var index = $scope.learning_list.indexOf(competency);
       console.log(index);
       $scope.learning_list.splice(index, 1);
-      console.log(learning_list);
+      $http.post('/removeCompetency', {competency}).success(function(data){
+          console.log("I guess I'm done");
+        });      
   };
 }]);
 app.controller('DidYouKnowController', ['$scope', '$http',  function($scope, $http) {
@@ -172,5 +176,5 @@ $scope.updateLearningObjective = function(question_id) {
   });
    };
 
-  
+
 }])
