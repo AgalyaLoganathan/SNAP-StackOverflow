@@ -46,7 +46,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({secret: '1234567890QWERTY'}));
 
 // mongo connection
-mongoDb.connect('mongodb://localhost/snap_stackoverflow');
+mongoDb.connect('mongodb://admin:admin@ds011732.mlab.com:11732/snap_stackoverflow');
 var connection = mongoDb.connection;
 var userSchema = new mongoDb.Schema({
   userId: Number,
